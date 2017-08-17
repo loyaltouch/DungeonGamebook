@@ -1,0 +1,19 @@
+h1{
+  font-size: medium;
+  font-weight: bold;
+}
+.st_label {
+  color: white;
+  background: black;
+}
+.st_max {
+  font-size: 30;
+  border: solid 3px black;
+  border-radius: 6px;
+  width: 1em;
+  text-align: right;
+}
+.st_now {
+  border-bottom: solid 1px black;
+  width: 10em;
+}
