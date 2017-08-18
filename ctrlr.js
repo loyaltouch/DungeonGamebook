@@ -1,17 +1,32 @@
 $(()=>{
   window._g = new Game();
-  $("#do_next").click(do_next);
-  $("#message").text(window._g.members.あなた.name);
+  reflesh();
 });
 
-function do_next(){
-  $.get("scenario/start.json", (data)=>{
+function do_select(scene){
+  $.get("scenario/" + scene + ".json", (data)=>{
     window._g.parse(data);
     reflesh();
   });
 }
 
 function reflesh(){
-  let tagged = window._g.message.replace(/\n/g, "<br />");
+  let g = window._g;
+  let tagged = g.message.replace(/\n/g, "<br />");
   $("#message").html(tagged);
+
+  // 選択欄の再描画
+  $("#select").html("");
+  if(g.next){
+    $("#select").append(build_li("≫次へ", g.next));
+  }
+  if(g.select){
+    for(let i = 0; i < g.select.length; i++){
+      $("#select").append(build_li(g.select[i].label, g.select[i].link));
+    }
+  }
+}
+
+function build_li(label, link){
+  return "<li><a href='#' onclick='do_select(\"" + link + "\")'>" + label + "</a></li>";
 }
