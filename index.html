@@ -4,8 +4,9 @@
 	<meta charset="UTF-8" />
 	<link rel="stylesheet" href="view.css" />
 	<script src="jquery.js"></script>
-	<script src="ctrlr.js"></script>
+	<script src="items.js"></script>
 	<script src="logic/logic.js"></script>
+	<script src="ctrlr.js"></script>
   </head>
   <body>
 	<h1>Let's ダンジョン踏破!!</h1>
@@ -24,17 +25,60 @@
 	  </tr>
 	  <tr>
 		<td class="st_label">加<br />護</td>
-		<td class="st_max" id="you_pro_max">9</td>
-		<td class="st_now" id="you_pro_now">9</td>
+		<td class="st_max" id="you_lck_max">9</td>
+		<td class="st_now" id="you_lck_now">9</td>
 	  </tr>
 	</table>
 	<!-- ステータス欄 終了 -->
+	<!-- メニュー欄 開始 -->
+	<div id="menu_slider">++ メニュー ++</div>
+	<div id="menu_content">
+	  アイテム一覧 【装備】<span id="equip_name"></span>
+	  <table class="menu_table">
+		<tr>
+		  <th>武器</th>
+		  <th>装備</th>
+		  <th>個数</th>
+		  <th>食料</th>
+		  <th>個数</th>
+		  <th>その他</th>
+		  <th>個数</th>
+		</tr>
+		<tr>
+		  <td id="items_1_1_name"></td>
+		  <td><button onclick="do_equip('1')" id="items_1_1_equip">装備</button></td>
+		  <td id="items_1_1_count"></td>
+		  <td id="items_2_1_name"></td>
+		  <td id="items_2_1_count"></td>
+		  <td id="items_0_1_name"></td>
+		  <td id="items_0_1_count"></td>
+		</tr>
+		<tr>
+		  <td id="items_1_2_name"></td>
+		  <td><button onclick="do_equip('2')" id="items_1_2_equip">装備</button></td>
+		  <td id="items_1_2_count"></td>
+		  <td id="items_2_2_name"></td>
+		  <td id="items_2_2_count"></td>
+		  <td id="items_0_2_name"></td>
+		  <td id="items_0_2_count"></td>
+		</tr>
+		<tr>
+		  <td id="items_1_3_name"></td>
+		  <td><button onclick="do_equip('3')" id="items_1_3_equip">装備</button></td>
+		  <td id="items_1_3_count"></td>
+		  <td id="items_2_3_name"></td>
+		  <td id="items_2_3_count"></td>
+		  <td id="items_0_3_name"></td>
+		  <td id="items_0_3_count"></td>
+		</tr>
+	  </table>
+	</div>
+	<!-- メニュー欄 終了 -->
 	<!-- メッセージ欄 開始 -->
 	<p id="message"></p>
 	<!-- メッセージ欄 終了 -->
 	<!-- 選択欄 開始 -->
-	<ul id="select">
-    </ul>
+	<ul id="select"></ul>
 	<!-- 選択欄 終了 -->
   </body>
 </html>
