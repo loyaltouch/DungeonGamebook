@@ -18,8 +18,8 @@ class Game{
     this.items = get_item_data();
     this.members = {};
     var you = new Chara("you", "あなた", 12, 7, 9);
-    you.equip = this.items.ナイフ;
     this.members.you = you;
+    this.equip_weapon("ナイフ");
     this.next = "start";
     this.message = "";
   }
@@ -40,6 +40,11 @@ class Game{
         this.select.push(entry);
       }
     }
+  }
+
+  equip_weapon(item_name){
+    this.equip = item_name;
+    this.members.you.equip = this.safe_get_item(item_name);
   }
 
   safe_get_item(item_name){
