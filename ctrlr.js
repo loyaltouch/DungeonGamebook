@@ -13,8 +13,7 @@ function do_select(scene){
 function do_equip(id){
   let item_name = $("#items_1_" + id + "_name").text();
   if(item_name){
-    $("#equip_name").text(item_name);
-    window._g.members.you.equip = window._g.safe_get_item(item_name);
+    window._g.equip_weapon(item_name);
     reflesh();
   }
 }
@@ -25,6 +24,7 @@ function reflesh(){
   reflesh_status(g.members.you);
 
   // アイテム欄の再描画
+  $("#equip_name").text(g.equip);
   reflesh_items(1);
   reflesh_items(2);
   reflesh_items(0);

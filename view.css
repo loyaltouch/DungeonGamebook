@@ -17,9 +17,15 @@ h1{
   border-bottom: solid 1px black;
   width: 10em;
 }
-.menu_table {
-  border: solid 1px black;
+th.weapon_col {
+  background: #c0ffff;
 }
-th {
+th.food_col {
+  background: #ffffc0;
+}
+th.other_col {
   background: #c0c0c0;
+}
+.menu_table td {
+  border-bottom: dotted 2px black;
 }
