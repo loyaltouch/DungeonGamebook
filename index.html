@@ -31,47 +31,63 @@
 	</table>
 	<!-- ステータス欄 終了 -->
 	<!-- メニュー欄 開始 -->
-	<div id="menu_slider">++ メニュー ++</div>
+	<div class="menu_slider">++ メニュー ++</div>
 	<div id="menu_content">
 	  アイテム一覧 【装備】<span id="equip_name"></span>
 	  <table class="menu_table">
 		<tr>
+		  <th class="weapon_col"> </th>
 		  <th class="weapon_col">武器</th>
 		  <th class="weapon_col">装備</th>
 		  <th class="weapon_col">個数</th>
+		  <th class="food_col"> </th>
 		  <th class="food_col">食料</th>
 		  <th class="food_col">個数</th>
+		  <th class="other_col"> </th>
 		  <th class="other_col">その他</th>
 		  <th class="other_col">個数</th>
 		</tr>
 		<tr>
+		  <td><input class="icheck" type="radio" name="item_select" value="items_1_1" /></td>
 		  <td id="items_1_1_name"></td>
-		  <td><button onclick="do_equip('1')" id="items_1_1_equip">装備</button></td>
+		  <td id="items_1_1_equiped"></td>
 		  <td id="items_1_1_count"></td>
+		  <td><input class="icheck" type="radio" name="item_select" value="items_2_1" /></td>
 		  <td id="items_2_1_name"></td>
 		  <td id="items_2_1_count"></td>
+		  <td><input class="icheck" type="radio" name="item_select" value="items_0_1" /></td>
 		  <td id="items_0_1_name"></td>
 		  <td id="items_0_1_count"></td>
 		</tr>
 		<tr>
+		  <td><input class="icheck" type="radio" name="item_select" value="items_1_2" /></td>
 		  <td id="items_1_2_name"></td>
-		  <td><button onclick="do_equip('2')" id="items_1_2_equip">装備</button></td>
+		  <td id="items_1_2_equiped"></td>
 		  <td id="items_1_2_count"></td>
+		  <td><input class="icheck" type="radio" name="item_select" value="items_2_2" /></td>
 		  <td id="items_2_2_name"></td>
 		  <td id="items_2_2_count"></td>
+		  <td><input class="icheck" type="radio" name="item_select" value="items_0_2" /></td>
 		  <td id="items_0_2_name"></td>
 		  <td id="items_0_2_count"></td>
 		</tr>
 		<tr>
+		  <td><input class="icheck" type="radio" name="item_select" value="items_1_3" /></td>
 		  <td id="items_1_3_name"></td>
-		  <td><button onclick="do_equip('3')" id="items_1_3_equip">装備</button></td>
+		  <td id="items_1_3_equiped"></td>
 		  <td id="items_1_3_count"></td>
+		  <td><input class="icheck" type="radio" name="item_select" value="items_2_3" /></td>
 		  <td id="items_2_3_name"></td>
 		  <td id="items_2_3_count"></td>
+		  <td><input class="icheck" type="radio" name="item_select" value="items_0_3" /></td>
 		  <td id="items_0_3_name"></td>
 		  <td id="items_0_3_count"></td>
 		</tr>
 	  </table>
+	  <button id="select_equip" onclick="do_equip()">装備</button>
+	  <button id="select_food" onclick="">食事</button>
+	  <ul id="select_item"></ul>
+	  <div class="menu_slider">-- メニュー --</div>
 	</div>
 	<!-- メニュー欄 終了 -->
 	<!-- メッセージ欄 開始 -->

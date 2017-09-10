@@ -1,8 +1,11 @@
 $(()=>{
   window._g = new Game();
+  $(".icheck").click(icheck_checked);
   reflesh();
 });
 
+
+// 実行処理
 function do_select(scene){
   $.get("scenario/" + scene + ".json", (data)=>{
     window._g.parse(data);
@@ -10,11 +13,38 @@ function do_select(scene){
   });
 }
 
-function do_equip(id){
-  let item_name = $("#items_1_" + id + "_name").text();
-  if(item_name){
-    window._g.equip_weapon(item_name);
+function do_equip(){
+  if(window.icheck){
+    window._g.equip_weapon(window.icheck);
     reflesh();
+  }
+}
+
+
+// ボタンのon/off
+function icheck_checked(target){
+  let name = $(target)[0].target.value;
+  let iname = $(`#${name}_name`).text();
+  let item = window._g.items[iname];
+  if(item){
+    let itype = item.type;
+    command_on_off(itype);
+    window.icheck = iname;
+  }
+}
+
+function command_on_off(type){
+  if(type == 1){
+    // 武器選択中
+    $("#select_equip").prop("disabled", false);
+    $("#select_food").prop("disabled", true);
+  }else if(type == 2){
+    // 食料選択中
+    $("#select_equip").prop("disabled", true);
+    $("#select_food").prop("disabled", false);
+  }else{
+    $("#select_equip").prop("disabled", true);
+    $("#select_food").prop("disabled", true);
   }
 }
 

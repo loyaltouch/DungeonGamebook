@@ -54,4 +54,15 @@ class Game{
       return this.items[0];
     }
   }
+
+  get_inventory(type){
+    let items = this.items;
+    let result = [];
+    for(let iname in items){
+      if(items[iname].type == type && items[iname].count > 0){
+        result.push(iname);
+      }
+    }
+    return result;
+  }
 }
