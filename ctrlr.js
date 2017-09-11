@@ -20,6 +20,13 @@ function do_equip(){
   }
 }
 
+function do_feed(){
+  if(window.icheck){
+    window._g.feed(window.icheck);
+    reflesh();
+  }
+}
+
 
 // ボタンのon/off
 function icheck_checked(target){

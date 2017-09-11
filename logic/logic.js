@@ -11,6 +11,21 @@ class Chara{
   get_dex(){
     return this.dex + this.equip.value;
   }
+
+  cure(value){
+    if(value > 0){
+      this.vit_now += value;
+      if(this.vit_now > this.vit_max){
+        this.vit_now = this.vit_max;
+      }
+    }
+  }
+
+  damage(value){
+    if(value > 0){
+      this.vit_now -= value;
+    }
+  }
 }
 
 class Game{
@@ -44,14 +59,22 @@ class Game{
 
   equip_weapon(item_name){
     this.equip = item_name;
-    this.members.you.equip = this.safe_get_item(item_name);
+    this.members.you.equip = this.safe_get_item(item_name, 1);
   }
 
-  safe_get_item(item_name){
-    if(this.items[item_name]){
+  safe_get_item(item_name, type){
+    if(this.items[item_name] && this.items[item_name].type == type){
       return this.items[item_name];
     }else{
       return this.items[0];
+    }
+  }
+
+  feed(item_name){
+    let item = this.safe_get_item(item_name, 2);
+    if(item.type == 2 && item.count > 0){
+      item.count--;
+      this.members.you.cure(999);
     }
   }
 
