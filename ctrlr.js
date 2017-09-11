@@ -93,14 +93,20 @@ function reflesh_status(member){
 function reflesh_items(type){
   let items = window._g.items;
   let rows = 1;
+  // アイテムの個数分走査
   for(let name in items){
     if(items[name].type == type){
       if(items[name].count > 0){
-        $("#items_" + type + "_" + rows + "_name").text(name);
-        $("#items_" + type + "_" + rows + "_count").text(items[name].count);
+        $(`#items_${type}_${rows}_name`).text(name);
+        $(`#items_${type}_${rows}_count`).text(items[name].count);
         rows++;
       }
     }
+  }
+  // 表示欄の個数分表示クリア
+  for(;rows <= 3; rows++){
+    $(`#items_${type}_${rows}_name`).text("");
+    $(`#items_${type}_${rows}_count`).text("");
   }
 }
 
