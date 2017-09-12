@@ -63,10 +63,12 @@ function reflesh(){
   reflesh_status(g.members.you);
 
   // アイテム欄の再描画
-  $("#equip_name").text(g.equip);
   reflesh_items(1);
   reflesh_items(2);
   reflesh_items(0);
+  let item_selected = $("input[name=item_select]:checked").val();
+  window.icheck = $(`#${item_selected}_name`).text();
+  $("#equip_name").text(g.equip);
   
   // 本文の再描画
   let tagged = g.message.replace(/\n/g, "<br />");
