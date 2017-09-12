@@ -10,7 +10,7 @@ $(()=>{
 
 // 実行処理
 function do_select(scene){
-  $.get("scenario/" + scene + ".json", (data)=>{
+  $.get(`scenario/${scene}.json`, (data)=>{
     window._g.parse(data);
     reflesh();
   });
@@ -86,11 +86,11 @@ function reflesh(){
 }
 
 function reflesh_status(member){
-  $("#" + member.id + "_vit_max").text(member.vit_max);
-  $("#" + member.id + "_vit_now").text(member.vit_now);
-  $("#" + member.id + "_lck_max").text(member.lck_max);
-  $("#" + member.id + "_lck_now").text(member.lck_now);
-  $("#" + member.id + "_dex_max").text(member.get_dex());
+  $(`#${member.id}_vit_max`).text(member.vit_max);
+  $(`#${member.id}_vit_now`).text(member.vit_now);
+  $(`#${member.id}_lck_max`).text(member.lck_max);
+  $(`#${member.id}_lck_now`).text(member.lck_now);
+  $(`#${member.id}_dex_max`).text(member.get_dex());
 }
 
 function reflesh_items(type){
