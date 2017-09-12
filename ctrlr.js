@@ -68,7 +68,6 @@ function reflesh(){
   reflesh_items(0);
   let item_selected = $("input[name=item_select]:checked").val();
   window.icheck = $(`#${item_selected}_name`).text();
-  $("#equip_name").text(g.equip);
   
   // 本文の再描画
   let tagged = g.message.replace(/\n/g, "<br />");
@@ -102,6 +101,12 @@ function reflesh_items(type){
   for(let i = 0; i < item_list.length; i++){
     $(`#items_${type}_${rows}_name`).text(item_list[i]);
     $(`#items_${type}_${rows}_count`).text(items[item_list[i]].count);
+    // 装備欄の再描画
+    if(item_list[i] == window._g.equip){
+      $(`#items_${type}_${rows}_equiped`).text("★");
+    }else{
+      $(`#items_${type}_${rows}_equiped`).text("");
+    }
     rows++;
   }
   
@@ -109,6 +114,7 @@ function reflesh_items(type){
   for(;rows <= 3; rows++){
     $(`#items_${type}_${rows}_name`).text("");
     $(`#items_${type}_${rows}_count`).text("");
+    $(`#items_${type}_${rows}_equiped`).text("");
   }
 }
 
