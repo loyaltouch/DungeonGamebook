@@ -1,6 +1,9 @@
 $(()=>{
   window._g = new Game();
-  $(".icheck").click(icheck_checked);
+  $(".icheck").click((target) =>{
+    let name = $(target)[0].target.value;
+    select_checked(name);
+  });
   reflesh();
 });
 
@@ -29,8 +32,7 @@ function do_feed(){
 
 
 // ボタンのon/off
-function icheck_checked(target){
-  let name = $(target)[0].target.value;
+function select_checked(name){
   let iname = $(`#${name}_name`).text();
   let item = window._g.items[iname];
   if(item){
@@ -109,5 +111,5 @@ function reflesh_items(type){
 }
 
 function build_li(label, link){
-  return "<li><a href='#' onclick='do_select(\"" + link + "\")'>" + label + "</a></li>";
+  return `<li><a href="#" onclick="do_select('${link}')">${label}</a></li>`;
 }
