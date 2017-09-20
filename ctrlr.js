@@ -126,16 +126,24 @@ function reflesh_items(type){
 }
 
 function reflesh_image(data){
+  let canvas = document.getElementById("canvas").getContext("2d");
+  canvas.strokeStyle = "black";
+  canvas.fillStyle = "white";
+  canvas.fillRect(0, 0, 100, 100);
   if(data && data.length >= 2){
+    if(data[0] == "room"){
+      reflesh_room_image(canvas, data[1]);
+    }
+  }
+}
+
+function reflesh_room_image(canvas, data){
+  try{
     let x = data[0];
     let y = data[1];
-    let canvas = document.getElementById("canvas").getContext("2d");
-    canvas.strokeStyle = "black";
-    canvas.fillStyle = "white";
-    canvas.fillRect(0, 0, 100, 100);
     canvas.beginPath();
     canvas.strokeRect(5, 5, x * 20, y * 20);
-  }
+  }catch(e){}
 }
 
 function build_li(label, link){
