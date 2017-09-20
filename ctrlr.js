@@ -4,6 +4,10 @@ $(()=>{
     let name = $(target)[0].target.value;
     select_checked(name);
   });
+  $(".menu_slider").click(()=>{
+    $("#menu_content").slideToggle();
+  });
+  $("#menu_content").hide();
   do_select("start");
 });
 
