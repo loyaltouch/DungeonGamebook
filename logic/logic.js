@@ -38,10 +38,12 @@ class Game{
     this.next = "start";
     this.message = "";
   }
-  
+
   parse(json){
     let data = JSON.parse(json);
     this.message = data.message;
+
+    this.image = data.image;
 
     this.next = "";
     if(data.next){

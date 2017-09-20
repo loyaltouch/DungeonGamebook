@@ -4,7 +4,7 @@ $(()=>{
     let name = $(target)[0].target.value;
     select_checked(name);
   });
-  reflesh();
+  do_select("start");
 });
 
 
@@ -68,7 +68,10 @@ function reflesh(){
   reflesh_items(0);
   let item_selected = $("input[name=item_select]:checked").val();
   window.icheck = $(`#${item_selected}_name`).text();
-  
+
+  // 画像欄の再描画
+  reflesh_image(g.image);
+
   // 本文の再描画
   let tagged = g.message.replace(/\n/g, "<br />");
   $("#message").html(tagged);
@@ -109,12 +112,25 @@ function reflesh_items(type){
     }
     rows++;
   }
-  
+
   // 表示欄の個数分表示クリア
   for(;rows <= 3; rows++){
     $(`#items_${type}_${rows}_name`).text("");
     $(`#items_${type}_${rows}_count`).text("");
     $(`#items_${type}_${rows}_equiped`).text("");
+  }
+}
+
+function reflesh_image(data){
+  if(data && data.length >= 2){
+    let x = data[0];
+    let y = data[1];
+    let canvas = document.getElementById("canvas").getContext("2d");
+    canvas.strokeStyle = "black";
+    canvas.fillStyle = "white";
+    canvas.fillRect(0, 0, 100, 100);
+    canvas.beginPath();
+    canvas.strokeRect(5, 5, x * 20, y * 20);
   }
 }
 
