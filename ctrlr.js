@@ -137,12 +137,36 @@ function reflesh_image(data){
   }
 }
 
+/**
+ * @param data 部屋描画パラメータの説明
+ * 最初の2項目は、外周の横・縦長さ
+ * 残りの項目は、[x座標,y座標,{0:横方向 1:縦方向}]の順番で
+ * 壁の位置を描画
+ */
 function reflesh_room_image(canvas, data){
   try{
     let x = data[0];
     let y = data[1];
     canvas.beginPath();
     canvas.strokeRect(5, 5, x * 20, y * 20);
+    // 扉を描画
+    let i = 0;
+    for(i = 2; i < data.length; i += 3){
+      let xx = data[i];
+      let yy = data[i + 1];
+      let d = data[i + 2];
+      if(d == 0){
+        // 横方向の扉
+        canvas.moveTo(xx * 20 + 15, yy * 20);
+        canvas.lineTo(xx * 20 + 15, yy * 20 + 10);
+      }else{
+        // 縦方向の扉
+        canvas.moveTo(xx * 20 , yy * 20 + 15);
+        canvas.lineTo(xx * 20 + 10, yy * 20 + 15);
+      }
+    }
+    canvas.closePath();
+    canvas.stroke();
   }catch(e){}
 }
 
