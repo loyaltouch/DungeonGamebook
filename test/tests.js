@@ -19,3 +19,9 @@ QUnit.test("Game", (assert)=>{
   assert.ok(g.members, "メンバーデータ作成");
   assert.ok(g.members.you, "主人公データ作成");
 });
+
+QUnit.test("get_inventory", assert =>{
+  let g = new Game();
+  let weapons = g.get_inventory(1);
+  assert.ok(weapons.length, 8, "武器の数");
+});

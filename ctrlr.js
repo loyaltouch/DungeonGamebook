@@ -151,10 +151,10 @@ function reflesh_room_image(canvas, data){
     canvas.strokeRect(5, 5, x * 20, y * 20);
     // 扉を描画
     let i = 0;
-    for(i = 2; i < data.length; i += 3){
-      let xx = data[i];
-      let yy = data[i + 1];
-      let d = data[i + 2];
+    for(i = 2; i < data.length; i++){
+      let xx = data[i][0];
+      let yy = data[i][1];
+      let d = data[i][2];
       if(d == 0){
         // 横方向の扉
         canvas.moveTo(xx * 20 + 15, yy * 20);
