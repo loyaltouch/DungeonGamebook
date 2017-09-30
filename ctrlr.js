@@ -130,10 +130,8 @@ function reflesh_image(data){
   canvas.strokeStyle = "black";
   canvas.fillStyle = "white";
   canvas.fillRect(0, 0, 100, 100);
-  if(data && data.length >= 2){
-    if(data[0] == "room"){
-      reflesh_room_image(canvas, data[1]);
-    }
+  if(data){
+    reflesh_room_image(canvas, data.room);
   }
 }
 
