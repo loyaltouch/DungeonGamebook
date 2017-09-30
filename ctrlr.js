@@ -143,9 +143,13 @@ function reflesh_image(data){
  */
 function reflesh_room_image(canvas, data){
   try{
+    // 最初の２つは外壁の描画
+    canvas.strokeStyle = "black";
+    canvas.fillStyle = "#dddddd";
     let x = data[0];
     let y = data[1];
     canvas.beginPath();
+    canvas.fillRect(5, 5, x * 20, y * 20);
     canvas.strokeRect(5, 5, x * 20, y * 20);
     // 扉を描画
     let i = 0;
