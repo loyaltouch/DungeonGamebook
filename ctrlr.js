@@ -90,6 +90,13 @@ function reflesh(){
       $("#select").append(build_li(g.select[i].label, g.select[i].link));
     }
   }
+
+  // 入力欄の再描画
+  if(g.input){
+    $("#input_section").show();
+  }else{
+    $("#input_section").hide();
+  }
 }
 
 function reflesh_status(member){

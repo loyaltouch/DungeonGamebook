@@ -41,21 +41,32 @@ class Game{
 
   parse(json){
     let data = JSON.parse(json);
+
+    // メッセージのパース
     this.message = data.message;
 
+    // 画像データのパース
     this.image = data.image;
 
+    // 「次へ」選択肢のパース
     this.next = "";
     if(data.next){
       this.next = data.next;
     }
 
+    // その他の選択肢のパース
     this.select = [];
     if(data.select){
       for(let i = 0; i < data.select.length; i += 2){
         let entry = {label: data.select[i], link: data.select[i + 1]};
         this.select.push(entry);
       }
+    }
+
+    // 入力欄のパース
+    this.input = false;
+    if(data.input){
+      this.input = true;
     }
   }
 
