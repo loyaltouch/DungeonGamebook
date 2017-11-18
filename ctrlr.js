@@ -100,17 +100,29 @@ function input_button_click(){
   let g = window._g;
   let text = $("#input_field").val();
   let value = (0 - text) * -1;
-  if(value <= 0){
+  if(value > 0 && g.items.りんご.count + value <= 5){
+    g.items.りんご.count += value;
+    g.message = "あなたはりんごを" + value + "個得た";
+    g.select = [{
+      label: "<<戻る",
+      link: "1_4"
+    }];
   }else if(g.items.りんご.count + value > 5){
     g.members.you.damage(2);
     g.message = "あなたはりんごを" + value + "個取ろうとした。\nその瞬間、木の上からりんごが大量に降ってきてあなたに降り注いだ！\nあなたは2ダメージ";
+    g.select = [{
+      label: "<<戻る",
+      link: "1_4"
+    }];
     g.check_game_over();
-    reflesh();
   }else{
-    g.items.りんご.count += value;
-    g.message = "あなたはりんごを" + value + "個得た";
-    reflesh();
+    g.message = "何も起きなかった";
+    g.select = [{
+      label: "<<戻る",
+      link: "1_4"
+    }];
   }
+    reflesh();
 }
 
 function reflesh_status(member){
