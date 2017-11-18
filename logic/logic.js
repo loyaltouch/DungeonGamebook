@@ -32,9 +32,6 @@ class Game{
   constructor(){
     this.items = get_item_data();
     this.members = {};
-    var you = new Chara("you", "あなた", 12, 7, 9);
-    this.members.you = you;
-    this.equip_weapon("ナイフ");
     this.next = "start";
     this.message = "";
   }
@@ -42,17 +39,18 @@ class Game{
   parse(json){
     let data = JSON.parse(json);
 
+    // 初期化処理
+    if(data.startup){
+      var you = new Chara("you", "あなた", 12, 7, 9);
+      this.members.you = you;
+      this.equip_weapon("ナイフ");
+    }
+
     // メッセージのパース
     this.message = data.message;
 
     // 画像データのパース
     this.image = data.image;
-
-    // 「次へ」選択肢のパース
-    this.next = "";
-    if(data.next){
-      this.next = data.next;
-    }
 
     // その他の選択肢のパース
     this.select = [];
@@ -63,10 +61,23 @@ class Game{
       }
     }
 
+    // 「次へ」選択肢のパース
+    if(data.next){
+      this.select.push({label: "≫次へ", link: data.next});
+    }
+
     // 入力欄のパース
     this.input = false;
     if(data.input){
       this.input = true;
+    }
+  }
+
+  check_game_over(){
+    if(this.members.you.vit_now <= 0){
+      this.message += "\nあなたは死亡した…\n";
+      this.select = [{label: "≫終わり", link: "start"}];
+      this.input = false
     }
   }
 

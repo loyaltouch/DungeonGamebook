@@ -79,23 +79,37 @@ function reflesh(){
   // 本文の再描画
   let tagged = g.message.replace(/\n/g, "<br />");
   $("#message").html(tagged);
-
+  
   // 選択欄の再描画
   $("#select").html("");
-  if(g.next){
-    $("#select").append(build_li("≫次へ", g.next));
-  }
   if(g.select){
     for(let i = 0; i < g.select.length; i++){
       $("#select").append(build_li(g.select[i].label, g.select[i].link));
     }
   }
-
+  
   // 入力欄の再描画
   if(g.input){
     $("#input_section").show();
   }else{
     $("#input_section").hide();
+  }
+}
+
+function input_button_click(){
+  let g = window._g;
+  let text = $("#input_field").val();
+  let value = (0 - text) * -1;
+  if(value <= 0){
+  }else if(g.items.りんご.count + value > 5){
+    g.members.you.damage(2);
+    g.message = "あなたはりんごを" + value + "個取ろうとした。\nその瞬間、木の上からりんごが大量に降ってきてあなたに降り注いだ！\nあなたは2ダメージ";
+    g.check_game_over();
+    reflesh();
+  }else{
+    g.items.りんご.count += value;
+    g.message = "あなたはりんごを" + value + "個得た";
+    reflesh();
   }
 }
 
