@@ -6,5 +6,5 @@
   "select": [
     "西の扉を開く", "1_3"
   ],
-  "input": "if((0 - $('#input_field').text()) < 5){alert('OK')}else{alert('OK')}"
+  "input": "get_apple"
 }

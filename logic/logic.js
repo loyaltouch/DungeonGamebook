@@ -28,12 +28,40 @@ class Chara{
   }
 }
 
+class Macro{
+  get_apple(g, text, value){
+    if(value > 0 && g.items.りんご.count + value <= 5){
+      g.items.りんご.count += value;
+      g.message = "あなたはりんごを" + value + "個得た";
+      g.select = [{
+      label: "<<戻る",
+      link: "1_4"
+      }];
+    }else if(value > 0 && g.items.りんご.count + value > 5){
+      g.members.you.damage(2);
+      g.message = "あなたはりんごを" + value + "個取ろうとした。\nその瞬間、木の上からりんごが大量に降ってきてあなたに降り注いだ！\nあなたは2ダメージ";
+      g.select = [{
+      label: "<<戻る",
+      link: "1_4"
+      }];
+      g.check_game_over();
+    }else{
+      g.message = "何も起きなかった";
+      g.select = [{
+      label: "<<戻る",
+      link: "1_4"
+      }];
+    }
+  }
+}
+
 class Game{
   constructor(){
     this.items = get_item_data();
     this.members = {};
     this.next = "start";
     this.message = "";
+    this.macro = new Macro();
   }
 
   parse(json){
@@ -67,9 +95,9 @@ class Game{
     }
 
     // 入力欄のパース
-    this.input = false;
+    this.input = "";
     if(data.input){
-      this.input = true;
+      this.input = data.input;
     }
   }
 

@@ -96,35 +96,6 @@ function reflesh(){
   }
 }
 
-function input_button_click(){
-  let g = window._g;
-  let text = $("#input_field").val();
-  let value = (0 - text) * -1;
-  if(value > 0 && g.items.りんご.count + value <= 5){
-    g.items.りんご.count += value;
-    g.message = "あなたはりんごを" + value + "個得た";
-    g.select = [{
-      label: "<<戻る",
-      link: "1_4"
-    }];
-  }else if(g.items.りんご.count + value > 5){
-    g.members.you.damage(2);
-    g.message = "あなたはりんごを" + value + "個取ろうとした。\nその瞬間、木の上からりんごが大量に降ってきてあなたに降り注いだ！\nあなたは2ダメージ";
-    g.select = [{
-      label: "<<戻る",
-      link: "1_4"
-    }];
-    g.check_game_over();
-  }else{
-    g.message = "何も起きなかった";
-    g.select = [{
-      label: "<<戻る",
-      link: "1_4"
-    }];
-  }
-    reflesh();
-}
-
 function reflesh_status(member){
   $(`#${member.id}_vit_max`).text(member.vit_max);
   $(`#${member.id}_vit_now`).text(member.vit_now);
@@ -205,6 +176,21 @@ function reflesh_room_image(canvas, data){
   }catch(e){}
 }
 
+/*
+==============================================
+  UTILITY
+==============================================
+ */
+
 function build_li(label, link){
   return `<li><a href="#" onclick="do_select('${link}')">${label}</a></li>`;
 }
+
+function input_button_click(){
+  let g = window._g;
+  let text = $("#input_field").val();
+  let value = (0 - text) * -1;
+  g.macro[g.input](g, text, value);
+  reflesh();
+}
+
