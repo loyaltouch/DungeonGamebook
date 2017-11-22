@@ -39,6 +39,12 @@ function do_save(){
   $("#dump_text").val(JSON.stringify(dump));
 }
 
+function do_load(){
+  const dump = JSON.parse($("#dump_text").val());
+  window._g.load_from_dump(dump);
+  reflesh();
+}
+
 
 // ボタンのon/off
 function select_checked(name){

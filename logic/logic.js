@@ -165,4 +165,23 @@ class Game{
     dump.scene = this.scene;
     return dump;
   }
+
+  load_from_dump(dump){
+    let you = this.members.you;
+    ["vit_max", "vit_now", "dex_max", "lck_max", "lck_now"].forEach(status =>{
+      if(!isNaN(dump.you[status])){
+        you[status] = dump.you[status];
+      }
+    });
+    this.equip_weapon(dump.you.equip);
+
+    for(let item_name in dump.item){
+      if(this.items[item_name]){
+        this.items[item_name].count = dump.item[item_name];
+      }
+    }
+
+    this.flags = dump.flag;
+    this.scene = dump.scene;
+  }
 }
