@@ -5,7 +5,7 @@ class Chara{
     this.vit_max = this.vit_now = vit;
     this.dex = dex;
     this.lck_max = this.lck_now = lck;
-    this.equip = { name: "素手", type: 1, value: 0, prise: 0 };
+    this.equip = { name: "(なし)", type: 1, value: 0, prise: 0 };
   }
 
   get_dex(){
