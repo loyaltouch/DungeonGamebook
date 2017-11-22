@@ -34,6 +34,11 @@ function do_feed(){
   }
 }
 
+function do_save(){
+  let dump = window._g.save_to_dump();
+  $("#dump_text").val(JSON.stringify(dump));
+}
+
 
 // ボタンのon/off
 function select_checked(name){

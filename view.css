@@ -29,3 +29,7 @@ th.other_col {
 .menu_table td {
   border-bottom: dotted 2px black;
 }
+#dump_text {
+  width: 20em;
+  height: 5em;
+}

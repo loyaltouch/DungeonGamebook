@@ -5,7 +5,7 @@ class Chara{
     this.vit_max = this.vit_now = vit;
     this.dex = dex;
     this.lck_max = this.lck_now = lck;
-    this.equip = { type: 1, value: 0, prise: 0 };
+    this.equip = { name: "素手", type: 1, value: 0, prise: 0 };
   }
 
   get_dex(){
@@ -59,8 +59,9 @@ class Game{
   constructor(){
     this.items = get_item_data();
     this.members = {};
-    this.next = "start";
+    this.flags = {};
     this.message = "";
+    this.scene = "start";
     this.macro = new Macro();
   }
 
@@ -115,11 +116,12 @@ class Game{
   }
 
   safe_get_item(item_name, type){
+    let result = this.items[0];
     if(this.items[item_name] && this.items[item_name].type == type){
-      return this.items[item_name];
-    }else{
-      return this.items[0];
+      result =  this.items[item_name];
     }
+    result.name = item_name;
+    return result;
   }
 
   feed(item_name){
@@ -139,5 +141,28 @@ class Game{
       }
     }
     return result;
+  }
+
+  save_to_dump(){
+    const you = this.members.you;
+    let dump = {
+      you:{
+        vit_max: you.vit_max,
+        vit_now: you.vit_now,
+        dex_max: you.dex_max,
+        lck_max: you.lck_max,
+        lck_now: you.lck_now,
+        equip: you.equip.name
+      }
+    };
+    dump.item = {};
+    for(let item_name in this.items){
+      if(this.items[item_name].count > 0){
+        dump.item[item_name] = this.items[item_name].count;
+      }
+    }
+    dump.flag = this.flags;
+    dump.scene = this.scene;
+    return dump;
   }
 }
