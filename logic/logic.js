@@ -167,21 +167,37 @@ class Game{
   }
 
   load_from_dump(dump){
+    if(dump.you){
+      this.load_you(dump.you);
+    }
+    if(dump.item){
+      this.load_item(dump.item);
+    }
+    if(dump.flag){
+      this.flags = dump.flag;
+    }
+    if(dump.scene){
+      this.scene = dump.scene;
+    }
+  }
+
+  load_you(data){
     let you = this.members.you;
     ["vit_max", "vit_now", "dex_max", "lck_max", "lck_now"].forEach(status =>{
-      if(!isNaN(dump.you[status])){
-        you[status] = dump.you[status];
+      if(!isNaN(data[status])){
+        you[status] = data[status];
       }
     });
-    this.equip_weapon(dump.you.equip);
+    if(data.equip){
+      this.equip_weapon(data.equip);
+    }
+  }
 
-    for(let item_name in dump.item){
+  load_item(data){
+    for(let item_name in data){
       if(this.items[item_name]){
-        this.items[item_name].count = dump.item[item_name];
+        this.items[item_name].count = data[item_name];
       }
     }
-
-    this.flags = dump.flag;
-    this.scene = dump.scene;
   }
 }

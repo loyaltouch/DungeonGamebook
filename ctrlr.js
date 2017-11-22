@@ -15,6 +15,7 @@ $(()=>{
 // 実行処理
 function do_select(scene){
   $.get(`scenario/${scene}.json`, (data)=>{
+    window._g.scene = scene;
     window._g.parse(data);
     reflesh();
   });
@@ -42,7 +43,7 @@ function do_save(){
 function do_load(){
   const dump = JSON.parse($("#dump_text").val());
   window._g.load_from_dump(dump);
-  reflesh();
+  do_select(window._g.scene);
 }
 
 
