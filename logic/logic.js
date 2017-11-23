@@ -73,6 +73,9 @@ class Game{
       this.equip_weapon("ナイフ");
     }
 
+    // セーブ用データの確保
+    this.dump = this.save_to_dump();
+
     // メッセージのパース
     this.message = data.message;
 

@@ -11,8 +11,13 @@ $(()=>{
   do_select("start");
 });
 
+/*
+==============================================
+  ボタン押下時の処理
+==============================================
+ */
 
-// 実行処理
+// 選択リンク実行
 function do_select(scene){
   $.get(`scenario/${scene}.json`, (json)=>{
     let data = JSON.parse(json);
@@ -22,6 +27,7 @@ function do_select(scene){
   });
 }
 
+// 装備ボタン実行
 function do_equip(){
   if(window.icheck){
     window._g.equip_weapon(window.icheck);
@@ -29,6 +35,7 @@ function do_equip(){
   }
 }
 
+// 食事ボタン実行
 function do_feed(){
   if(window.icheck){
     window._g.feed(window.icheck);
@@ -36,11 +43,12 @@ function do_feed(){
   }
 }
 
+// 出力ボタン実行
 function do_save(){
-  let dump = window._g.save_to_dump();
-  $("#dump_text").val(JSON.stringify(dump));
+  $("#dump_text").val(JSON.stringify(window._g.dump));
 }
 
+// 入力ボタン実行
 function do_load(){
   const dump = JSON.parse($("#dump_text").val());
   window._g.load_from_dump(dump);
