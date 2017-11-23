@@ -17,7 +17,6 @@ QUnit.test("Game", (assert)=>{
   let g = new Game();
   assert.ok(g.items,　"アイテムデータ作成");
   assert.ok(g.members, "メンバーデータ作成");
-  assert.ok(g.members.you, "主人公データ作成");
 });
 
 QUnit.test("get_inventory", assert =>{

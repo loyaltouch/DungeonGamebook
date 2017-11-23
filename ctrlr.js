@@ -14,9 +14,10 @@ $(()=>{
 
 // 実行処理
 function do_select(scene){
-  $.get(`scenario/${scene}.json`, (data)=>{
+  $.get(`scenario/${scene}.json`, (json)=>{
+    let data = JSON.parse(json);
     window._g.scene = scene;
-    window._g.parse(data);
+    window._g.set_scene(data);
     reflesh();
   });
 }

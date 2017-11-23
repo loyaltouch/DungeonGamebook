@@ -65,9 +65,7 @@ class Game{
     this.macro = new Macro();
   }
 
-  parse(json){
-    let data = JSON.parse(json);
-
+  set_scene(data){
     // 初期化処理
     if(data.startup){
       var you = new Chara("you", "あなた", 12, 7, 9);
