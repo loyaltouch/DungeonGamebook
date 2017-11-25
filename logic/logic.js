@@ -29,28 +29,14 @@ class Chara{
 }
 
 class Macro{
-  get_apple(g, text, value){
+  get_apple(g, text){
+    let value = (0 - text) * -1;
     if(value > 0 && g.items.りんご.count + value <= 5){
-      g.items.りんご.count += value;
-      g.message = "あなたはりんごを" + value + "個得た";
-      g.select = [{
-      label: "<<戻る",
-      link: "1_4"
-      }];
+      return "1_4_1";
     }else if(value > 0 && g.items.りんご.count + value > 5){
-      g.members.you.damage(2);
-      g.message = "あなたはりんごを" + value + "個取ろうとした。\nその瞬間、木の上からりんごが大量に降ってきてあなたに降り注いだ！\nあなたは2ダメージ";
-      g.select = [{
-      label: "<<戻る",
-      link: "1_4"
-      }];
-      g.check_game_over();
+      return "1_4_2";
     }else{
-      g.message = "何も起きなかった";
-      g.select = [{
-      label: "<<戻る",
-      link: "1_4"
-      }];
+      return "1_4_3";
     }
   }
 }
@@ -59,7 +45,7 @@ class Game{
   constructor(){
     this.items = get_item_data();
     this.members = {};
-    this.flags = {};
+    this.global = {};
     this.message = "";
     this.scene = "start";
     this.macro = new Macro();
@@ -75,6 +61,13 @@ class Game{
 
     // セーブ用データの確保
     this.dump = this.save_to_dump();
+
+    // 各種フラグ処理の確認
+    if(data.set){
+      this.set_flags(data.set);
+      // ステータスに反映
+      this.load_from_dump(this.dump);
+    }
 
     // メッセージのパース
     this.message = data.message;
@@ -101,6 +94,24 @@ class Game{
     if(data.input){
       this.input = data.input;
     }
+
+    // ゲームオーバーの確認
+    this.check_game_over();
+  }
+
+  set_flags(data){
+    data.forEach(entry =>{
+      // 最初の項目はフラグに対する操作
+      if(entry[0] == "+"){
+        if(this.dump[entry[1]][entry[2]]){
+          this.dump[entry[1]][entry[2]] += entry[3];
+        }else{
+          this.dump[entry[1]][entry[2]] = entry[3];
+        }
+      }else if(entry[0] == "="){
+        this.dump[entry[1]][entry[2]] = entry[3];
+      }
+    });
   }
 
   check_game_over(){
@@ -162,7 +173,7 @@ class Game{
         dump.item[item_name] = this.items[item_name].count;
       }
     }
-    dump.flag = this.flags;
+    dump.flag = this.global;
     dump.scene = this.scene;
     return dump;
   }
@@ -175,7 +186,7 @@ class Game{
       this.load_item(dump.item);
     }
     if(dump.flag){
-      this.flags = dump.flag;
+      this.global = dump.flag;
     }
     if(dump.scene){
       this.scene = dump.scene;

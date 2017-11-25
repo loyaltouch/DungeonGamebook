@@ -19,7 +19,10 @@ $(()=>{
 
 // 選択リンク実行
 function do_select(scene){
-  $.get(`scenario/${scene}.json`, (json)=>{
+  $.ajax({
+    url: `scenario/${scene}.json`,
+    cache: false
+  }).done(json =>{
     let data = JSON.parse(json);
     window._g.scene = scene;
     window._g.set_scene(data);
@@ -43,16 +46,25 @@ function do_feed(){
   }
 }
 
-// 出力ボタン実行
+// ダンプ出力ボタン実行
 function do_save(){
   $("#dump_text").val(JSON.stringify(window._g.dump));
 }
 
-// 入力ボタン実行
+// ダンプ入力ボタン実行
 function do_load(){
   const dump = JSON.parse($("#dump_text").val());
   window._g.load_from_dump(dump);
   do_select(window._g.scene);
+}
+
+// 自由入力ボタン実行
+function do_input(){
+  let g = window._g;
+  let text = $("#input_field").val();
+  let scene = g.macro[g.input](g, text);
+  do_select(scene);
+  reflesh();
 }
 
 
@@ -205,13 +217,5 @@ function reflesh_room_image(canvas, data){
 
 function build_li(label, link){
   return `<li><a href="#" onclick="do_select('${link}')">${label}</a></li>`;
-}
-
-function input_button_click(){
-  let g = window._g;
-  let text = $("#input_field").val();
-  let value = (0 - text) * -1;
-  g.macro[g.input](g, text, value);
-  reflesh();
 }
 
