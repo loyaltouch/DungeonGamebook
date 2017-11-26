@@ -30,7 +30,7 @@ class Chara{
 
 class Macro{
   get_apple(g, text){
-    let value = Util.cint(text);
+    let value = +text;
     g.local[0] = value;
     if(value > 0 && g.items.りんご.count + value <= 5){
       return "1_4_1";
@@ -120,13 +120,13 @@ class Game{
   set_flags(data){
     data.forEach(entry =>{
       // フラグを数値に変換
-      let value = Util.cint(entry[3]);
+      let value = +entry[3];
       let matched = entry[3].match(/^\$\{(.)\}$/);
       if(matched){
         if(matched[1].match(/^[0123456789]$/)){
-          value = Util.cint(this.local[matched[1]]);
+          value = +this.local[matched[1]];
         }else{
-          value = Util.cint(this.global[matched[1]]);
+          value = +this.global[matched[1]];
         }
       }
       
@@ -242,11 +242,5 @@ class Game{
     var you = new Chara("you", "あなた", 12, 7, 9);
     this.members.you = you;
     this.equip_weapon("ナイフ");
-  }
-}
-
-class Util{
-  static cint(str){
-    return (0 - str) * -1;
   }
 }
