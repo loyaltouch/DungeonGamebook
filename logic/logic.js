@@ -30,7 +30,7 @@ class Chara{
 
 class Macro{
   get_apple(g, text){
-    let value = (0 - text) * -1;
+    let value = Util.cint(text);
     g.local[0] = value;
     if(value > 0 && g.items.りんご.count + value <= 5){
       return "1_4_1";
@@ -74,7 +74,7 @@ class Game{
     if(data.message){
       let message2 = data.message.replace(/\$\{(.)\}/g, (hit0, hit1) =>{
         // ${n}ローカルフラグの置き換え
-        if(hit1.match(/[0123456789]/)){
+        if(hit1.match(/^[0123456789]$/)){
           return this.local[hit1];
         }
         // ${x}グローバルフラグの置き換え
@@ -119,13 +119,16 @@ class Game{
 
   set_flags(data){
     data.forEach(entry =>{
-      // ローカル変数を数値に変換
-      let value = (0 - entry[3]) * -1;
-      let matched = entry[3].match(/\$\{(.)\}/);
+      // フラグを数値に変換
+      let value = Util.cint(entry[3]);
+      let matched = entry[3].match(/^\$\{(.)\}$/);
       if(matched){
-        value = (0 - this.local[matched[1]]) * -1;
+        if(matched[1].match(/^[0123456789]$/)){
+          value = Util.cint(this.local[matched[1]]);
+        }else{
+          value = Util.cint(this.global[matched[1]]);
+        }
       }
-        
       
       // 最初の項目はフラグに対する操作
       if(entry[0] == "+"){
@@ -239,5 +242,11 @@ class Game{
     var you = new Chara("you", "あなた", 12, 7, 9);
     this.members.you = you;
     this.equip_weapon("ナイフ");
+  }
+}
+
+class Util{
+  static cint(str){
+    return (0 - str) * -1;
   }
 }
