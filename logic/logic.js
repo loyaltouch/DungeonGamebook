@@ -102,6 +102,11 @@ class Game{
       this.select.push({label: "≫次へ", link: data.next});
     }
 
+    // 「戻る」選択肢のパース
+    if(data.prev){
+      this.select.push({label: "≫戻る", link: data.prev});
+    }
+
     // 入力欄のパース
     this.input = "";
     if(data.input){
