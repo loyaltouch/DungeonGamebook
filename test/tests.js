@@ -24,3 +24,18 @@ QUnit.test("get_inventory", assert =>{
   let weapons = g.get_inventory(1);
   assert.ok(weapons.length, 8, "武器の数");
 });
+
+QUnit.test("message", assert =>{
+  let g = new Game();
+  g.local[0] = 2;
+  let data = {};
+  data.message = "あいうえお${0}かきくけこ";
+  g.set_scene(data);
+  assert.ok(g.message, "あいうえお2かきくけこ", "メッセージ置き換え");
+
+  g.local[1] = 5;
+  data.message = "さしすせそ${0}たちつてと${1}";
+  g.set_scene(data);
+  assert.ok(g.message, "さしすせそ${0}たちつてと5", "メッセージ置き換え");
+});
+

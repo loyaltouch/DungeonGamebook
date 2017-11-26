@@ -51,14 +51,13 @@ class Game{
     this.message = "";
     this.scene = "start";
     this.macro = new Macro();
+    this.startup();
   }
 
   set_scene(data){
     // 初期化処理
     if(data.startup){
-      var you = new Chara("you", "あなた", 12, 7, 9);
-      this.members.you = you;
-      this.equip_weapon("ナイフ");
+      this.startup();
     }
 
     // セーブ用データの確保
@@ -72,16 +71,24 @@ class Game{
     }
 
     // メッセージのパース
-    // ${n}ローカル変数の置き換え
-    let message2 = data.message.replace(/\$\{(.)\}/g, (hit0, hit1) =>{
-      return this.local[hit1] || hit0;
-    });
-    this.message = data.message;
+    if(data.message){
+      let message2 = data.message.replace(/\$\{(.)\}/g, (hit0, hit1) =>{
+        // ${n}ローカルフラグの置き換え
+        if(!isNaN(hit1) && this.local.length < hit1){
+          return this.local[hit1];
+        }
+        // ${x}グローバルフラグの置き換え
+        return this.global[hit1] || hit0;
+      });
+      this.message = data.message;
+    }
 
     // 画像データのパース
-    this.image = data.image;
+    if(data.image){
+      this.image = data.image;
+    }
 
-    // その他の選択肢のパース
+    // 選択肢のパース
     this.select = [];
     if(data.select){
       for(let i = 0; i < data.select.length; i += 2){
@@ -226,5 +233,11 @@ class Game{
         this.items[item_name].count = data[item_name];
       }
     }
+  }
+
+  startup(){
+    var you = new Chara("you", "あなた", 12, 7, 9);
+    this.members.you = you;
+    this.equip_weapon("ナイフ");
   }
 }
