@@ -25,6 +25,19 @@ QUnit.test("get_inventory", assert =>{
   assert.ok(weapons.length, 8, "武器の数");
 });
 
+QUnit.test("set flag", assert =>{
+  let g = new Game();
+  g.members.you.vit_now = 12;
+  g.members.you.dex = 9;
+  g.dump = g.save_to_dump();
+  g.set_flags([
+    ["=", "you", "vit_now", 7],
+    ["+", "you", "dex_max", 2]
+    ]);
+  assert.equal(g.dump.you.vit_now, 7, "体力を7にセット");
+  assert.equal(g.dump.you.dex_max, 11, "技量に2加算");
+});
+
 QUnit.test("replace massage with local flag", assert =>{
   let g = new Game();
   g.local[0] = 2;
@@ -70,3 +83,5 @@ QUnit.test("replace massage with global flag", assert =>{
   assert.equal(g.global.B, undefined, "グローバル変数はset_sceneのあとに初期化しない");
   assert.equal(g.global.C, 12, "グローバル変数はset_sceneのあとに初期化しない");
 });
+
+

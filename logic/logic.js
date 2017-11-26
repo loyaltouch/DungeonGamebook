@@ -121,7 +121,7 @@ class Game{
     data.forEach(entry =>{
       // フラグを数値に変換
       let value = +entry[3];
-      let matched = entry[3].match(/^\$\{(.)\}$/);
+      let matched = /^\$\{(.)\}$/.test(entry[3]);
       if(matched){
         if(matched[1].match(/^[0123456789]$/)){
           value = +this.local[matched[1]];
