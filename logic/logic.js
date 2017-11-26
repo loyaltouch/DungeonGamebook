@@ -31,6 +31,7 @@ class Chara{
 class Macro{
   get_apple(g, text){
     let value = (0 - text) * -1;
+    g.local[0] = value;
     if(value > 0 && g.items.りんご.count + value <= 5){
       return "1_4_1";
     }else if(value > 0 && g.items.りんご.count + value > 5){
@@ -46,6 +47,7 @@ class Game{
     this.items = get_item_data();
     this.members = {};
     this.global = {};
+    this.local = [];
     this.message = "";
     this.scene = "start";
     this.macro = new Macro();
@@ -70,6 +72,10 @@ class Game{
     }
 
     // メッセージのパース
+    // ${n}ローカル変数の置き換え
+    let message2 = data.message.replace(/\$\{(.)\}/g, (hit0, hit1) =>{
+      return this.local[hit1] || hit0;
+    });
     this.message = data.message;
 
     // 画像データのパース
@@ -97,19 +103,28 @@ class Game{
 
     // ゲームオーバーの確認
     this.check_game_over();
+
+    // ローカルフラグはすべて初期化
+    for(let i = 0; i < this.local.length; i++){
+      this.local[i] = 0;
+    }
   }
 
   set_flags(data){
     data.forEach(entry =>{
+      // ローカル変数を数値に変換
+      let value = (0 - entry[3]) * -1;
+      let matched = entry[3].match(/\$\{(.)\}/);
+      if(matched){
+        value = (0 - this.local[matched[1]]) * -1;
+      }
+        
+      
       // 最初の項目はフラグに対する操作
       if(entry[0] == "+"){
-        if(this.dump[entry[1]][entry[2]]){
-          this.dump[entry[1]][entry[2]] += entry[3];
-        }else{
-          this.dump[entry[1]][entry[2]] = entry[3];
-        }
+        this.dump[entry[1]][entry[2]] = (this.dump[entry[1]][entry[2]] || 0) + value;
       }else if(entry[0] == "="){
-        this.dump[entry[1]][entry[2]] = entry[3];
+        this.dump[entry[1]][entry[2]] = value;
       }
     });
   }
@@ -161,7 +176,7 @@ class Game{
       you:{
         vit_max: you.vit_max,
         vit_now: you.vit_now,
-        dex_max: you.dex_max,
+        dex_max: you.dex,
         lck_max: you.lck_max,
         lck_now: you.lck_now,
         equip: you.equip.name
@@ -195,7 +210,7 @@ class Game{
 
   load_you(data){
     let you = this.members.you;
-    ["vit_max", "vit_now", "dex_max", "lck_max", "lck_now"].forEach(status =>{
+    ["vit_max", "vit_now", "dex", "lck_max", "lck_now"].forEach(status =>{
       if(!isNaN(data[status])){
         you[status] = data[status];
       }
