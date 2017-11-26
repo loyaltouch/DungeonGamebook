@@ -125,6 +125,7 @@ function reflesh(){
   if(g.input){
     $("#input_section").show();
   }else{
+    $("#input_field").val("");
     $("#input_section").hide();
   }
 }

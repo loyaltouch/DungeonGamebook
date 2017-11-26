@@ -74,13 +74,13 @@ class Game{
     if(data.message){
       let message2 = data.message.replace(/\$\{(.)\}/g, (hit0, hit1) =>{
         // ${n}ローカルフラグの置き換え
-        if(!isNaN(hit1) && this.local.length < hit1){
+        if(hit1.match(/[0123456789]/)){
           return this.local[hit1];
         }
         // ${x}グローバルフラグの置き換え
         return this.global[hit1] || hit0;
       });
-      this.message = data.message;
+      this.message = message2;
     }
 
     // 画像データのパース
