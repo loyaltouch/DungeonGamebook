@@ -63,6 +63,11 @@ class Game{
     // セーブ用データの確保
     this.dump = this.save_to_dump();
 
+    // 条件ロジック
+    if(data.if){
+      this.parse_condition(this.dump, data);
+    }
+    
     // 各種フラグ処理の確認
     if(data.set){
       this.set_flags(data.set);
@@ -120,6 +125,40 @@ class Game{
     for(let i = 0; i < this.local.length; i++){
       this.local[i] = 0;
     }
+  }
+
+  parse_condition(input, target){
+    target.if.forEach(cond =>{
+      if(this.check_condition(input, cond)){
+        if(cond[4].message){
+          if(target.message){
+            target.message += cond[4].message;
+          }else{
+            target.message = cond[4].message;
+          }
+        }
+        if(cond[4].set){
+          if(target.set){
+            cond[4].set.forEach(item =>{
+              target.set.push(item);
+            });
+          }else{
+            target.set = cond[4].set;
+          }
+        }
+      }
+    });
+  }
+
+  check_condition(input, cond){
+    if(cond[0] == "="){
+      return input[cond[1]][cond[2]] == cond[3];
+    }else if(cond[0] == ">"){
+      return input[cond[1]][cond[2]] > cond[3];
+    }else if(cond[0] == "<"){
+      return input[cond[1]][cond[2]] < cond[3];
+    }
+    return false;
   }
 
   set_flags(data){

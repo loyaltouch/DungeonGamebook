@@ -84,4 +84,31 @@ QUnit.test("replace massage with global flag", assert =>{
   assert.equal(g.global.C, 12, "グローバル変数はset_sceneのあとに初期化しない");
 });
 
+QUnit.test("condition tag test", assert =>{
+  let g = new Game();
+  
+  let input = {};
+  input.flag = {};
+  input.flag.X = 3;
+  
+  let target = {};
+  target.message = "あいうえお";
+  target.set = [["=", "flag", "A", 2], ["=", "flag", "B", 3]];
+  target.if = [
+    ["=", "flag", "X", 3, {
+      message: "かきくけこ",
+      set: [["+", "flag", "A", 4], ["=", "item", "りんご", 6]]
+    }]
+    ];
+  g.parse_condition(input, target);
+  const target_set = JSON.stringify(target.set);
+  const result_set = JSON.stringify([
+    ["=", "flag", "A", 2],
+    ["=", "flag", "B", 3],
+    ["+", "flag", "A", 4],
+    ["=", "item", "りんご", 6]
+    ]);
 
+  assert.equal(target.message, "あいうえおかきくけこ", "ifフラグでmessage書き換え");
+  assert.equal(target_set, result_set, "ifフラグでset書き換え");
+});

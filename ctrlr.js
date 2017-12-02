@@ -167,7 +167,7 @@ function reflesh_image(data){
   let canvas = document.getElementById("canvas").getContext("2d");
   canvas.strokeStyle = "black";
   canvas.fillStyle = "white";
-  canvas.fillRect(0, 0, 100, 100);
+  canvas.fillRect(0, 0, 180, 180);
   if(data){
     reflesh_room_image(canvas, data.room);
   }
