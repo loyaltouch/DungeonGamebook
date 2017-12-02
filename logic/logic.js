@@ -1,4 +1,20 @@
+/** 
+ * 敵や味方など、キャラクターのクラス
+ *
+ * @class Chara
+ * @constructor
+ */
 class Chara{
+  /**
+   * コンストラクター
+   *
+   * @method Chara
+   * @param {String} id 変数などで使うキャラの識別名
+   * @param {String} name キャラの表示名
+   * @param {Integer} vit 体力の初期値および最大値
+   * @param {Integer} dex 技量値
+   * @param {Integer} lck 運の初期値および最大値
+   */
   constructor(id, name, vit, dex, lck){
     this.id = id;
     this.name = name;
@@ -8,10 +24,24 @@ class Chara{
     this.equip = { name: "(なし)", type: 1, value: 0, prise: 0 };
   }
 
+  /**
+   * 現在の装備と技量点から攻撃点を求める
+   * 
+   * @method get_dex
+   * @return {Integer} 攻撃点
+   */
   get_dex(){
     return this.dex + this.equip.value;
   }
 
+  /**
+   * 引数値分回復する
+   * 原体力点以上は回復しない
+   * また、引数がマイナスでもダメージを受けない
+   * 
+   * @method cure
+   * @param {Integer} value 回復量
+   */
   cure(value){
     if(value > 0){
       this.vit_now += value;
@@ -21,6 +51,13 @@ class Chara{
     }
   }
 
+  /**
+   * 引数値分ダメージを受ける
+   * 引数がマイナスでも回復しない
+   * 
+   * @method damage
+   * @param {Integer} value ダメージ量
+   */
   damage(value){
     if(value > 0){
       this.vit_now -= value;

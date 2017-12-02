@@ -1,0 +1,10 @@
+{
+    "name": "Dungeon Game Book",
+    "description": "logic.js document for Dungeon Game Book",
+    "version": "0.1",
+    "url": "https://loyaltouch.github.io/DungeonGamebook",
+    "options": {
+        "outdir": "./docs",
+        "paths":["./"]
+    }
+}
