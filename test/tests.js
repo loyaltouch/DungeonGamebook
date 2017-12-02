@@ -84,7 +84,7 @@ QUnit.test("replace massage with global flag", assert =>{
   assert.equal(g.global.C, 12, "グローバル変数はset_sceneのあとに初期化しない");
 });
 
-QUnit.test("condition tag test", assert =>{
+QUnit.test("condition tag test hit", assert =>{
   let g = new Game();
   
   let input = {};
@@ -110,5 +110,99 @@ QUnit.test("condition tag test", assert =>{
     ]);
 
   assert.equal(target.message, "あいうえおかきくけこ", "ifフラグでmessage書き換え");
+  assert.equal(target_set, result_set, "ifフラグでset書き換え");
+});
+
+QUnit.test("condition tag test nohit", assert =>{
+  let g = new Game();
+  
+  let input = {};
+  input.flag = {};
+  input.flag.X = 4;
+  
+  let target = {};
+  target.message = "あいうえお";
+  target.set = [["=", "flag", "A", 2], ["=", "flag", "B", 3]];
+  target.if = [
+    ["=", "flag", "X", 3, {
+      message: "かきくけこ",
+      set: [["+", "flag", "A", 4], ["=", "item", "りんご", 6]]
+    }]
+    ];
+  g.parse_condition(input, target);
+  const target_set = JSON.stringify(target.set);
+  const result_set = JSON.stringify([
+    ["=", "flag", "A", 2],
+    ["=", "flag", "B", 3]
+    ]);
+
+  assert.equal(target.message, "あいうえお", "ifフラグでmessage書き換え");
+  assert.equal(target_set, result_set, "ifフラグでset書き換え");
+});
+
+QUnit.test("condition tag test else", assert =>{
+  let g = new Game();
+  
+  let input = {};
+  input.flag = {};
+  input.flag.X = 4;
+  
+  let target = {};
+  target.message = "あいうえお";
+  target.set = [["=", "flag", "A", 2], ["=", "flag", "B", 3]];
+  target.if = [
+    ["=", "flag", "X", 3, {
+      message: "かきくけこ",
+      set: [["+", "flag", "A", 4], ["=", "item", "りんご", 6]]
+    }],
+    [0, 0, 0, 0, {
+      message: "さしすせそ",
+      set: [["=", "you", "vit_now", 12]]
+    }]
+    ];
+  g.parse_condition(input, target);
+  const target_set = JSON.stringify(target.set);
+  const result_set = JSON.stringify([
+    ["=", "flag", "A", 2],
+    ["=", "flag", "B", 3],
+    ["=", "you", "vit_now", 12]
+    ]);
+
+  assert.equal(target.message, "あいうえおさしすせそ", "ifフラグでmessage書き換え");
+  assert.equal(target_set, result_set, "ifフラグでset書き換え");
+});
+
+QUnit.test("condition tag test The nonexistent flag is treated as 0", assert =>{
+  let g = new Game();
+  
+  let input = {};
+  input.flag = {};
+  
+  let target = {};
+  target.message = "あいうえお";
+  target.set = [["=", "flag", "A", 2], ["=", "flag", "B", 3]];
+  target.if = [
+    ["=", "flag", "X", 3, {
+      message: "かきくけこ",
+      set: [["+", "flag", "A", 4], ["=", "item", "りんご", 6]]
+    }],
+    ["=", "flag", "X", 0, {
+      message: "なにぬねの",
+      set: [["+", "flag", "B", 9]]
+    }],
+    [0, 0, 0, 0, {
+      message: "さしすせそ",
+      set: [["=", "you", "vit_now", 12]]
+    }]
+    ];
+  g.parse_condition(input, target);
+  const target_set = JSON.stringify(target.set);
+  const result_set = JSON.stringify([
+    ["=", "flag", "A", 2],
+    ["=", "flag", "B", 3],
+    ["+", "flag", "B", 9]
+    ]);
+
+  assert.equal(target.message, "あいうえおなにぬねの", "ifフラグでmessage書き換え");
   assert.equal(target_set, result_set, "ifフラグでset書き換え");
 });

@@ -128,7 +128,7 @@ class Game{
   }
 
   parse_condition(input, target){
-    target.if.forEach(cond =>{
+    for(let cond of target.if){
       if(this.check_condition(input, cond)){
         if(cond[4].message){
           if(target.message){
@@ -146,17 +146,24 @@ class Game{
             target.set = cond[4].set;
           }
         }
+        return;
       }
-    });
+    }
   }
 
   check_condition(input, cond){
-    if(cond[0] == "="){
-      return input[cond[1]][cond[2]] == cond[3];
+    let judge = 0;
+    if(input[cond[1]] && input[cond[1]][cond[2]]){
+      judge = input[cond[1]][cond[2]];
+    }
+    if(cond[0] == 0){
+      return true;
+    }else if(cond[0] == "="){
+      return judge == cond[3];
     }else if(cond[0] == ">"){
-      return input[cond[1]][cond[2]] > cond[3];
+      return judge > cond[3];
     }else if(cond[0] == "<"){
-      return input[cond[1]][cond[2]] < cond[3];
+      return judge < cond[3];
     }
     return false;
   }
