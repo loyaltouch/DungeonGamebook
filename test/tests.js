@@ -97,7 +97,8 @@ QUnit.test("condition tag test hit", assert =>{
   target.if = [
     ["=", "flag", "X", 3, {
       message: "かきくけこ",
-      set: [["+", "flag", "A", 4], ["=", "item", "りんご", 6]]
+      set: [["+", "flag", "A", 4], ["=", "item", "りんご", 6]],
+      select: ["箱を開ける", "106"]
     }]
     ];
   g.parse_condition(input, target);
@@ -109,8 +110,12 @@ QUnit.test("condition tag test hit", assert =>{
     ["=", "item", "りんご", 6]
     ]);
 
+  const select_set = JSON.stringify(target.select);
+  const result_select_set = JSON.stringify(["箱を開ける", "106"]);
+
   assert.equal(target.message, "あいうえおかきくけこ", "ifフラグでmessage書き換え");
   assert.equal(target_set, result_set, "ifフラグでset書き換え");
+  assert.equal(select_set, result_select_set, "ifフラグでselect書き換え");
 });
 
 QUnit.test("condition tag test nohit", assert =>{
@@ -126,7 +131,7 @@ QUnit.test("condition tag test nohit", assert =>{
   target.if = [
     ["=", "flag", "X", 3, {
       message: "かきくけこ",
-      set: [["+", "flag", "A", 4], ["=", "item", "りんご", 6]]
+      set: [["+", "flag", "A", 4], ["=", "item", "りんご", 6]],
     }]
     ];
   g.parse_condition(input, target);

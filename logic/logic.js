@@ -130,6 +130,7 @@ class Game{
   parse_condition(input, target){
     for(let cond of target.if){
       if(this.check_condition(input, cond)){
+        // メッセージ追記
         if(cond[4].message){
           if(target.message){
             target.message += cond[4].message;
@@ -137,6 +138,7 @@ class Game{
             target.message = cond[4].message;
           }
         }
+        // フラグ設定追加
         if(cond[4].set){
           if(target.set){
             cond[4].set.forEach(item =>{
@@ -144,6 +146,14 @@ class Game{
             });
           }else{
             target.set = cond[4].set;
+          }
+        }
+        // 選択肢追加
+        if(cond[4].select){
+          if(target.select){
+            target.select.push(cond[4].select);
+          }else{
+            target.select = cond[4].select;
           }
         }
         return;
