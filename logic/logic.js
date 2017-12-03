@@ -2,7 +2,6 @@
  * 敵や味方など、キャラクターのクラス
  *
  * @class Chara
- * @constructor
  */
 class Chara{
   /**
@@ -11,9 +10,9 @@ class Chara{
    * @method Chara
    * @param {String} id 変数などで使うキャラの識別名
    * @param {String} name キャラの表示名
-   * @param {Integer} vit 体力の初期値および最大値
-   * @param {Integer} dex 技量値
-   * @param {Integer} lck 運の初期値および最大値
+   * @param {Number} vit 体力の初期値および最大値
+   * @param {Number} dex 技量値
+   * @param {Number} lck 運の初期値および最大値
    */
   constructor(id, name, vit, dex, lck){
     this.id = id;
@@ -28,7 +27,7 @@ class Chara{
    * 現在の装備と技量点から攻撃点を求める
    * 
    * @method get_dex
-   * @return {Integer} 攻撃点
+   * @return {Number} 攻撃点
    */
   get_dex(){
     return this.dex + this.equip.value;
@@ -40,7 +39,7 @@ class Chara{
    * また、引数がマイナスでもダメージを受けない
    * 
    * @method cure
-   * @param {Integer} value 回復量
+   * @param {Number} value 回復量
    */
   cure(value){
     if(value > 0){
@@ -65,6 +64,12 @@ class Chara{
   }
 }
 
+/**
+ * シナリオjsonでは記述が難しい複雑な関数を
+ * jsで定義するクラス
+ * 
+ * @class Macro
+ */
 class Macro{
   get_apple(g, text){
     let value = +text;
@@ -79,7 +84,17 @@ class Macro{
   }
 }
 
+/**
+ * ゲームのメインロジックを提供するクラス
+ *
+ * @class Game
+ */
 class Game{
+
+  /**
+   * コンストラクター
+   * @method Game
+   */
   constructor(){
     this.items = get_item_data();
     this.members = {};
@@ -91,6 +106,28 @@ class Game{
     this.startup();
   }
 
+  /**
+   * シーン遷移の際に呼び出される関数<br>
+   * 遷移の直前にセーブ用データをダンプし、ローカル変数をリセットする
+   *
+   * <ol>
+   * <li>startup : データ初期化(最初に戻る)
+   * <li>セーブ用データのダンプ
+   * <li>if : if条件による条件分岐
+   * <li>set : ダンプに対して各種フラグを設定し、ステータスに反映
+   * <li>message : 本文の反映
+   * <li>image : 画像の反映
+   * <li>select : 選択肢の反映
+   * <li>next : 特殊選択肢「≫次へ」の反映
+   * <li>prev : 特殊選択肢「≫戻る」の反映
+   * <li>input : 入力欄の有効化／無効化
+   * <li>「あなた」の体力が0以下なら選択肢を無効化してゲームオーバーに遷移
+   * <li>ローカルフラグの初期化
+   * </ol>
+   *
+   * @method set_scene
+   * @param {Object} data シナリオjsonをパースしたデータ
+   */
   set_scene(data){
     // 初期化処理
     if(data.startup){

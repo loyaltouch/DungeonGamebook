@@ -5,6 +5,6 @@
     "url": "https://loyaltouch.github.io/DungeonGamebook",
     "options": {
         "outdir": "./docs",
-        "paths":["./"]
+        "paths":["./logic/"]
     }
 }
