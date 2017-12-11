@@ -133,9 +133,19 @@ function reflesh(){
 function reflesh_status(member){
   $(`#${member.id}_vit_max`).text(member.vit_max);
   $(`#${member.id}_vit_now`).text(member.vit_now);
+  $(`#${member.id}_dex_max`).text(member.get_dex());
   $(`#${member.id}_lck_max`).text(member.lck_max);
   $(`#${member.id}_lck_now`).text(member.lck_now);
-  $(`#${member.id}_dex_max`).text(member.get_dex());
+}
+
+function reflesh_enemy(data){
+  if(data.buttle){
+    $("#enemy").show();
+  }else{
+    $("#enemy").hide();
+  }
+  $("#enemy_name").text(data.members.enemy.name);
+  reflesh_status(data.members.enemy);
 }
 
 function reflesh_items(type){

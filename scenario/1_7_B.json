@@ -1,0 +1,10 @@
+{
+  "image": {
+    "icon": "skelton.png"
+  },
+  "enemy": {
+    "name": "骸骨剣士",
+    "vit": 9,
+    "dex": 8
+  }
+}

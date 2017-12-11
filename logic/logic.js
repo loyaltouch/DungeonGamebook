@@ -167,6 +167,11 @@ class Game{
       this.image = data.image;
     }
 
+    // 敵データのパース
+    if(data.enemy){
+      this.encounter(data.enemy);
+    }
+
     // 選択肢のパース
     this.select = [];
     if(data.select){
@@ -282,6 +287,17 @@ class Game{
     }
   }
 
+  /**
+   * 戦闘開始
+   *
+   * @param {Object} data 敵データ
+   */
+  encounter(data){
+    this.buttle = true;
+    let enemy = new Chara("enemy", data.name, data.vit, data.dex, 0);
+    this.members.enemy = enemy;
+  }
+
   equip_weapon(item_name){
     this.equip = item_name;
     this.members.you.equip = this.safe_get_item(item_name, 1);
@@ -377,5 +393,6 @@ class Game{
     var you = new Chara("you", "あなた", 12, 7, 9);
     this.members.you = you;
     this.equip_weapon("ナイフ");
+    this.members.enemy = {};
   }
 }

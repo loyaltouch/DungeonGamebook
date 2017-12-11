@@ -33,3 +33,6 @@ th.other_col {
   width: 20em;
   height: 5em;
 }
+#info {
+  float: left;
+}

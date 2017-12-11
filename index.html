@@ -10,6 +10,7 @@
   </head>
   <body>
 	<h1>Let's ダンジョン踏破!!</h1>
+	<div id="info">
 	<!-- ステータス欄 開始 -->
 	<p id="you_name">あなた</p>
 	<table>
@@ -29,6 +30,21 @@
 		<td class="st_now" id="you_lck_now">9</td>
 	  </tr>
 	</table>
+	<div id="enemy">
+	  <p id="enemy_name"></p>
+	  <table>
+		<tr>
+		  <td class="st_label">体<br />力</td>
+		  <td class="st_max" id="enemy_vit_max">12</td>
+		  <td class="st_now" id="enemy_vit_now">12</td>
+		</tr>
+		<tr>
+		  <td class="st_label">技<br />量</td>
+		  <td class="st_max" id="enemy_dex_max">7</td>
+		  <td class="st_now" id="enemy_dex_now">7</td>
+		</tr>
+	  </table>
+	</div>
 	<!-- ステータス欄 終了 -->
 	<!-- メニュー欄 開始 -->
 	<div class="menu_slider">++ メニュー ++</div>
@@ -95,9 +111,10 @@
 	  <div class="menu_slider">-- メニュー --</div>
 	</div>
 	<!-- メニュー欄 終了 -->
-  <!-- イメージ欄 開始 -->
-  <canvas id="canvas" width="180" height="180"></canvas>
-  <!-- イメージ欄 終了 -->
+    </div>
+	<!-- イメージ欄 開始 -->
+	<canvas id="canvas" width="180" height="180"></canvas>
+	<!-- イメージ欄 終了 -->
 	<!-- メッセージ欄 開始 -->
 	<p id="message"></p>
 	<!-- メッセージ欄 終了 -->
@@ -108,7 +125,7 @@
 	<div id="input_section">
 	  <input type="text" id="input_field" />
 	  <button id="input_button" onclick="do_input()">入力</button>
-    </div>
+	</div>
 	<!-- 入力欄 終了 -->
   </body>
 </html>
