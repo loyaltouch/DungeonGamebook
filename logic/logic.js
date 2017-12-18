@@ -151,14 +151,7 @@ class Game{
 
     // メッセージのパース
     if(data.message){
-      let message2 = data.message.replace(/\$\{(.)\}/g, (hit0, hit1) =>{
-        // ${n}ローカルフラグの置き換え
-        if(hit1.match(/^[0123456789]$/)){
-          return this.local[hit1];
-        }
-        // ${x}グローバルフラグの置き換え
-        return this.global[hit1] || hit0;
-      });
+      let message2 = this.rep_val(data.message);
       this.message = message2;
     }
 
@@ -176,25 +169,36 @@ class Game{
     this.select = [];
     if(data.select){
       for(let i = 0; i < data.select.length; i += 2){
-        let entry = {label: data.select[i], link: data.select[i + 1]};
+        let select1 = this.rep_val(data.select[i]);
+        let select2 = this.rep_val(data.select[i + 1]);
+        let entry = {label: select1, link: select2};
         this.select.push(entry);
       }
     }
 
     // 「次へ」選択肢のパース
     if(data.next){
-      this.select.push({label: "≫次へ", link: data.next});
+      this.select.push({label: "≫次へ", link: this.rep_val(data.next)});
     }
 
     // 「戻る」選択肢のパース
     if(data.prev){
-      this.select.push({label: "≫戻る", link: data.prev});
+      this.select.push({label: "≫戻る", link: this.rep_val(data.prev)});
     }
 
     // 入力欄のパース
     this.input = "";
     if(data.input){
       this.input = data.input;
+    }
+
+    // シナリオ内運試しのパース
+    if(data.lucky){
+      this.lucky = true;
+      this.luck_success = data.lucky[0];
+      this.luck_failure = data.lucky[1];
+    }else{
+      this.lucky = false;
     }
 
     // ゲームオーバーの確認
@@ -260,15 +264,8 @@ class Game{
   set_flags(data){
     data.forEach(entry =>{
       // フラグを数値に変換
-      let value = +entry[3];
-      let matched = /^\$\{(.)\}$/.test(entry[3]);
-      if(matched){
-        if(matched[1].match(/^[0123456789]$/)){
-          value = +this.local[matched[1]];
-        }else{
-          value = +this.global[matched[1]];
-        }
-      }
+      let reped = this.rep_val(entry[3]);
+      let value = +reped;
       
       // 最初の項目はフラグに対する操作
       if(entry[0] == "+"){
@@ -296,6 +293,43 @@ class Game{
     this.buttle = true;
     let enemy = new Chara("enemy", data.name, data.vit, data.dex, 0);
     this.members.enemy = enemy;
+  }
+
+  /**
+   * シナリオ内での運試し
+   * 運試し成功の場合
+   * 
+   *
+   */
+  scenario_luck_test(){
+    if(this.luck_test()){
+      this.select.push({label: "≫次へ", link: this.rep_val(this.luck_success)});
+    }else{
+      this.select.push({label: "≫次へ", link: this.rep_val(this.luck_failure)});
+    }
+    this.lucky = false;
+  }
+
+  /**
+   * 運試し
+   * 運試しを行うたびに、運は1点減少する
+   * ただし、運は2未満にはならない
+   *
+   * @return {boolean} 運試し成功/失敗
+   */
+  luck_test(){
+    let luck_result = this.rand();
+    let result = this.members.you.lck_now >= luck_result;
+    this.message = `あなたの運 = ${this.members.you.lck_now}\n判定値 = ${luck_result}\n運試し`;
+    if(result){
+      this.message += "成功";
+    }else{
+      this.message += "失敗";
+    }
+    if(this.members.you.lck_now > 2){
+      this.members.you.lck_now--;
+    }
+    return result;
   }
 
   equip_weapon(item_name){
@@ -394,5 +428,29 @@ class Game{
     this.members.you = you;
     this.equip_weapon("ナイフ");
     this.members.enemy = {};
+  }
+
+  rand(){
+    return this.randi(6) + this.randi(6);
+  }
+
+  randi(max){
+    return Math.floor(Math.random() * max) + 1;
+  }
+
+  rep_val(text){
+    try{
+      return text.replace(/\$\{(.)\}/g, (hit0, hit1) =>{
+        // ${n}ローカルフラグの置き換え
+        if(hit1.match(/^[0123456789]$/)){
+          return this.local[hit1];
+        }
+        // ${x}グローバルフラグの置き換え
+        return this.global[hit1] || hit0;
+      });
+    }catch(e){
+      // 変換できない場合、値をそのまま返す
+      return text;
+    }
   }
 }
