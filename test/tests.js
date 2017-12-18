@@ -211,3 +211,20 @@ QUnit.test("condition tag test The nonexistent flag is treated as 0", assert =>{
   assert.equal(target.message, "あいうえおなにぬねの", "ifフラグでmessage書き換え");
   assert.equal(target_set, result_set, "ifフラグでset書き換え");
 });
+
+QUnit.test("1 Dice", (assert)=>{
+  let g = new Game();
+  for(let i = 0; i < 20; i++){
+    let result = g.randi(6);
+    assert.equal(1 <= result && result <= 6, true, `結果は[${result}]`);
+  }
+});
+
+QUnit.test("2 Dice", (assert)=>{
+  let g = new Game();
+  for(let i = 0; i < 20; i++){
+    let result = g.rand();
+    assert.equal(2 <= result && result <= 12, true, `結果は[${result}]`);
+  }
+});
+

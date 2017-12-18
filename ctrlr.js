@@ -67,6 +67,16 @@ function do_input(){
   reflesh();
 }
 
+// 運試し実行
+function do_luck_test(){
+  let g = window._g;
+  if(g.buttle){
+  }else{
+    g.scenario_luck_test();
+    reflesh();
+  }
+}
+
 
 // ボタンのon/off
 function select_checked(name){
@@ -112,6 +122,19 @@ function reflesh(){
   // 本文の再描画
   let tagged = g.message.replace(/\n/g, "<br />");
   $("#message").html(tagged);
+
+  // 敵の再描画
+  if(g.buttle){
+    $("#enemy").show();
+    reflesh_status(g.members.enemy);
+  }else{
+    $("#enemy").hide();
+  }
+
+  // 戦うリンクの再描画
+  set_visibility("attack", g.attack);
+  set_visibility("lucky", g.lucky);
+  set_visibility("turn", g.turn);
   
   // 選択欄の再描画
   $("#select").html("");
@@ -130,7 +153,16 @@ function reflesh(){
   }
 }
 
+function set_visibility(tag_id, flag){
+  if(flag){
+    $(`#${tag_id}`).show();
+  }else{
+    $(`#${tag_id}`).hide();
+  }
+}
+
 function reflesh_status(member){
+  $(`#${member.id}_name`).text(member.name);
   $(`#${member.id}_vit_max`).text(member.vit_max);
   $(`#${member.id}_vit_now`).text(member.vit_now);
   $(`#${member.id}_dex_max`).text(member.get_dex());
@@ -229,4 +261,3 @@ function reflesh_room_image(canvas, data){
 function build_li(label, link){
   return `<li><a href="#" onclick="do_select('${link}')">${label}</a></li>`;
 }
-

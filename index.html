@@ -112,6 +112,7 @@
 	</div>
 	<!-- メニュー欄 終了 -->
     </div>
+	<div id="content">
 	<!-- イメージ欄 開始 -->
 	<canvas id="canvas" width="180" height="180"></canvas>
 	<!-- イメージ欄 終了 -->
@@ -121,11 +122,19 @@
 	<!-- 選択欄 開始 -->
 	<ul id="select"></ul>
 	<!-- 選択欄 終了 -->
+	<!-- 戦闘用リンク開始 -->
+	<ul id="buttle_select">
+	  <li id="attack"><a href="#" onclick="do_attack()">戦う</a></li>
+	  <li id="lucky"><a href="#" onclick="do_luck_test()">運試しをする</a></li>
+	  <li id="turn"><a href="#" onclick="next_turn()">≫次へ</a></li>
+	</ul>
+	<!-- 戦闘用リンク終了 -->
 	<!-- 入力欄 開始 -->
 	<div id="input_section">
 	  <input type="text" id="input_field" />
 	  <button id="input_button" onclick="do_input()">入力</button>
 	</div>
 	<!-- 入力欄 終了 -->
+    </div>
   </body>
 </html>
