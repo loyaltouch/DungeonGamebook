@@ -247,7 +247,10 @@ class Game{
         // 選択肢追加
         if(cond[4].select){
           if(target.select){
-            target.select.push(cond[4].select);
+            for(let ii in cond[4].select){
+              target.select.push(cond[4].select[ii]);
+            }
+//            target.select.push(cond[4].select);
           }else{
             target.select = cond[4].select;
           }
