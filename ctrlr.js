@@ -71,22 +71,21 @@ function do_input(){
 function do_luck_test(){
   let g = window._g;
   if(g.buttle){
+    g.buttle_luck_test();
   }else{
     g.scenario_luck_test();
-    reflesh();
   }
+  reflesh();
 }
 
 function do_attack(){
   window._g.do_attack();
-}
-
-function do_luck_test(){
-  window._g.do_attack();
+  reflesh();
 }
 
 function next_turn(){
   window._g.next_turn();
+  reflesh();
 }
 
 // ボタンのon/off
@@ -138,17 +137,6 @@ function reflesh(){
   if(g.buttle){
     $("#enemy").show();
     reflesh_status(g.members.enemy);
-    if(g.initiative){
-      // 攻撃者が決定されている
-      $("#lucky").show();
-      $("#turn").show();
-      $("#attack").hide();
-    }else{
-      // 攻撃者が決定されていない
-      $("#lucky").hide();
-      $("#turn").hide();
-      $("#attack").show();
-    }
   }else{
     $("#enemy").hide();
   }

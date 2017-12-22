@@ -166,6 +166,11 @@ class Game{
       this.encounter(data.enemy);
     }
 
+    // 戦闘終了判定のパース
+    if(data.end){
+      this.end = data.end;
+    }
+
     // 選択肢のパース
     this.select = [];
     if(data.select){
@@ -288,7 +293,12 @@ class Game{
     if(this.members.you.vit_now <= 0){
       this.message += "\nあなたは死亡した…\n";
       this.select = [{label: "≫終わり", link: "start"}];
-      this.input = false
+      this.input = false;
+      this.buttle = false;
+      this.target = null;
+      this.attack = false;
+      this.lucky = false;
+      this.turn = false;
     }
   }
 
@@ -301,13 +311,18 @@ class Game{
     this.buttle = true;
     let enemy = new Chara("enemy", data.name, data.vit, data.dex, 0);
     this.members.enemy = enemy;
+    this.message = "";
+    this.init_turn();
   }
 
   /**
    * ターン開始
    */
   init_turn(){
-    this.initiative = null;
+    this.target = null;
+    this.attack = true;
+    this.lucky = false;
+    this.turn = false;
   }
 
   /**
@@ -317,31 +332,40 @@ class Game{
    */
   do_attack(){
     // 攻撃者決定
-    you_dex = this.members.you.get_dex() + rand();
-    enm_dex = this.members.enemy.get_dex() + rand();
+    let you_dex = this.members.you.get_dex() + this.rand();
+    let enm_dex = this.members.enemy.get_dex() + this.rand();
 
-    this.initiative = this.members.you;
+    this.target = this.members.enemy;
     if(you_dex < enm_dex){
-      this.initiative = this.members.enemy;
+      this.target = this.members.you;
     }
 
-    this.message = `あなたの攻撃力 = ${you_dex}\n${this.members.enemy.name}の攻撃力 = ${enm_dex}\n攻撃者 : ${this.initiative.name}`;
+    this.message = `あなたの攻撃力 = ${you_dex}\n${this.members.enemy.name}の攻撃力 = ${enm_dex}\nダメージを受けるのは : ${this.target.name}\n`;
+    this.damage = 2;
+    this.attack = false;
+    this.lucky = true;
+    this.turn = true;
   }
 
   /**
    * 次のターンに行くかどうかの判定
    *
    * @method next_turn
-   * @return {boolean} true 次のターン : false 戦闘終了
    */
   next_turn(){
     // ダメージの決定
+    this.target.vit_now -= this.damage;
+    this.message += this.damage + "ダメージ\n";
     if(this.members.enemy.vit_now <= 0){
       this.message += "あなたの勝利！";
-      this.select = {label: "≫次へ", link: this.rep_val(this.end) }
-      return false;
+      this.select = [{label: "≫次へ", link: this.rep_val(this.end) }]
+      this.buttle = false;
+      this.attack = false;
+      this.lucky = false;
+      this.turn = false;
     }else{
-      return true;
+      this.init_turn();
+      this.check_game_over();
     }
   }
 
@@ -361,6 +385,27 @@ class Game{
   }
 
   /**
+   *  戦闘中での運試し
+   *
+   */
+  buttle_luck_test(){
+    if(this.luck_test()){
+      if(this.target == this.members.you){
+        this.damage = 1;
+      }else{
+        this.damage = 3;
+      }
+    }else{
+      if(this.target == this.members.you){
+        this.damage = 3;
+      }else{
+        this.damage = 1;
+      }
+    }
+    this.lucky = false;
+  }
+
+  /**
    * 運試し
    * 運試しを行うたびに、運は1点減少する
    * ただし、運は2未満にはならない
@@ -372,9 +417,9 @@ class Game{
     let result = this.members.you.lck_now >= luck_result;
     this.message = `あなたの運 = ${this.members.you.lck_now}\n判定値 = ${luck_result}\n運試し`;
     if(result){
-      this.message += "成功";
+      this.message += "成功\n";
     }else{
-      this.message += "失敗";
+      this.message += "失敗\n";
     }
     if(this.members.you.lck_now > 2){
       this.members.you.lck_now--;
