@@ -102,6 +102,7 @@ class Game{
     this.local = [];
     this.message = "";
     this.scene = "start";
+    this.initiative = null;
     this.macro = new Macro();
     this.startup();
   }
@@ -210,6 +211,13 @@ class Game{
     }
   }
 
+  /**
+   * ifタグがtrueだった場合、メッセージ・フラグ・選択肢を更新
+   *
+   * @method parse_condition
+   * @param {Object} input 入力データ
+   * @param {Object} target 更新対象のデータ
+   */
   parse_condition(input, target){
     for(let cond of target.if){
       if(this.check_condition(input, cond)){
@@ -293,6 +301,48 @@ class Game{
     this.buttle = true;
     let enemy = new Chara("enemy", data.name, data.vit, data.dex, 0);
     this.members.enemy = enemy;
+  }
+
+  /**
+   * ターン開始
+   */
+  init_turn(){
+    this.initiative = null;
+  }
+
+  /**
+   * 攻撃開始
+   *
+   * @method do_attack
+   */
+  do_attack(){
+    // 攻撃者決定
+    you_dex = this.members.you.get_dex() + rand();
+    enm_dex = this.members.enemy.get_dex() + rand();
+
+    this.initiative = this.members.you;
+    if(you_dex < enm_dex){
+      this.initiative = this.members.enemy;
+    }
+
+    this.message = `あなたの攻撃力 = ${you_dex}\n${this.members.enemy.name}の攻撃力 = ${enm_dex}\n攻撃者 : ${this.initiative.name}`;
+  }
+
+  /**
+   * 次のターンに行くかどうかの判定
+   *
+   * @method next_turn
+   * @return {boolean} true 次のターン : false 戦闘終了
+   */
+  next_turn(){
+    // ダメージの決定
+    if(this.members.enemy.vit_now <= 0){
+      this.message += "あなたの勝利！";
+      this.select = {label: "≫次へ", link: this.rep_val(this.end) }
+      return false;
+    }else{
+      return true;
+    }
   }
 
   /**

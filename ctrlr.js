@@ -77,6 +77,17 @@ function do_luck_test(){
   }
 }
 
+function do_attack(){
+  window._g.do_attack();
+}
+
+function do_luck_test(){
+  window._g.do_attack();
+}
+
+function next_turn(){
+  window._g.next_turn();
+}
 
 // ボタンのon/off
 function select_checked(name){
@@ -127,6 +138,17 @@ function reflesh(){
   if(g.buttle){
     $("#enemy").show();
     reflesh_status(g.members.enemy);
+    if(g.initiative){
+      // 攻撃者が決定されている
+      $("#lucky").show();
+      $("#turn").show();
+      $("#attack").hide();
+    }else{
+      // 攻撃者が決定されていない
+      $("#lucky").hide();
+      $("#turn").hide();
+      $("#attack").show();
+    }
   }else{
     $("#enemy").hide();
   }
@@ -210,8 +232,11 @@ function reflesh_image(data){
   canvas.strokeStyle = "black";
   canvas.fillStyle = "white";
   canvas.fillRect(0, 0, 180, 180);
-  if(data){
+  if(data && data.room){
     reflesh_room_image(canvas, data.room);
+  }
+  if(data && data.icon){
+    reflesh_icon(canvas, "res/" + data.icon);
   }
 }
 
@@ -250,6 +275,14 @@ function reflesh_room_image(canvas, data){
     canvas.closePath();
     canvas.stroke();
   }catch(e){}
+}
+
+function reflesh_icon(canvas, icon_path){
+  let img = new Image();
+  img.src = icon_path;
+  img.onload = ()=>{
+    canvas.drawImage(img, 0, 0);
+  };
 }
 
 /*
