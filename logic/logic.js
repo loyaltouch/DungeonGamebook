@@ -250,10 +250,13 @@ class Game{
             for(let ii in cond[4].select){
               target.select.push(cond[4].select[ii]);
             }
-//            target.select.push(cond[4].select);
           }else{
             target.select = cond[4].select;
           }
+        }
+        // 敵データの更新
+        if(cond[4].enemy){
+          target.enemy = cond[4].enemy;
         }
         return;
       }

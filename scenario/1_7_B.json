@@ -2,6 +2,15 @@
   "image": {
     "icon": "skelton.png"
   },
+  "if": [
+    ["=", "flag", "剣", 1, {
+      "enemy": {
+        "name": "骸骨剣士",
+        "vit": 9,
+        "dex": 6
+      }
+    }]
+  ],
   "enemy": {
     "name": "骸骨剣士",
     "vit": 9,
