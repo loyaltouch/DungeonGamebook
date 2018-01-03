@@ -100,6 +100,8 @@ class Game{
     this.members = {};
     this.global = {};
     this.local = [];
+    this.select = [];
+    this.shop = [];
     this.message = "";
     this.scene = "start";
     this.initiative = null;
@@ -180,6 +182,16 @@ class Game{
         let entry = {label: select1, link: select2};
         this.select.push(entry);
       }
+    }
+    
+    // ショップのパース
+    if(data.shop){
+      for(let i = 0; i < data.shop.length; i++){
+        this.shop.push({label: `${data.shop[i]}を買う(銀貨${this.items[data.shop[i]].prise}枚)`, link: data.shop[i]});
+      }
+      this.shop.push({label: "持ち物を売る", link: "sell"});
+    }else{
+      this.shop = [];
     }
 
     // 「次へ」選択肢のパース
@@ -436,6 +448,16 @@ class Game{
   equip_weapon(item_name){
     this.equip = item_name;
     this.members.you.equip = this.safe_get_item(item_name, 1);
+  }
+
+  do_buy(item_name){
+    if(this.items.銀貨.count >= this.items[item_name].prise){
+      this.items[item_name].count++;
+      this.items.銀貨.count -= this.items[item_name].prise;
+      this.message += `${item_name}を手に入れた\n`;
+    }else{
+      this.message += "お金が足りない\n";
+    }
   }
 
   safe_get_item(item_name, type){

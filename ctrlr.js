@@ -78,11 +78,19 @@ function do_luck_test(){
   reflesh();
 }
 
+// 買い物ボタン(売りも含む)実行
+function do_buy(item_name){
+  window._g.do_buy(item_name);
+  reflesh();
+}
+
+// 攻撃実行
 function do_attack(){
   window._g.do_attack();
   reflesh();
 }
 
+// 戦闘中、次のターン開始ボタン
 function next_turn(){
   window._g.next_turn();
   reflesh();
@@ -150,7 +158,12 @@ function reflesh(){
   $("#select").html("");
   if(g.select){
     for(let i = 0; i < g.select.length; i++){
-      $("#select").append(build_li(g.select[i].label, g.select[i].link));
+      $("#select").append(build_li(g.select[i].label, "do_select", g.select[i].link));
+    }
+  }
+  if(g.shop){
+    for(let i = 0; i < g.shop.length; i++){
+      $("#select").append(build_li(g.shop[i].label, "do_buy", g.shop[i].link));
     }
   }
   
@@ -279,6 +292,6 @@ function reflesh_icon(canvas, icon_path){
 ==============================================
  */
 
-function build_li(label, link){
-  return `<li><a href="#" onclick="do_select('${link}')">${label}</a></li>`;
+function build_li(label, func, link){
+  return `<li><a href="#" onclick="${func}('${link}')">${label}</a></li>`;
 }
