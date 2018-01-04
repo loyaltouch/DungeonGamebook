@@ -78,11 +78,18 @@ function do_luck_test(){
   reflesh();
 }
 
-// 買い物ボタン(売りも含む)実行
+// 買い物ボタン実行
 function do_buy(item_name){
   window._g.do_buy(item_name);
   reflesh();
 }
+
+// ものを売るボタン実行
+function do_sell(item_name){
+  window._g.do_sell(item_name);
+  reflesh();
+}
+
 
 // 攻撃実行
 function do_attack(){
@@ -164,6 +171,11 @@ function reflesh(){
   if(g.shop){
     for(let i = 0; i < g.shop.length; i++){
       $("#select").append(build_li(g.shop[i].label, "do_buy", g.shop[i].link));
+    }
+  }
+  if(g.shop_sell){
+    for(let i = 0; i < g.shop_sell.length; i++){
+      $("#select").append(build_li(g.shop_sell[i].label, "do_sell", g.shop_sell[i].link));
     }
   }
   

@@ -102,6 +102,7 @@ class Game{
     this.local = [];
     this.select = [];
     this.shop = [];
+    this.shop_sell = [];
     this.message = "";
     this.scene = "start";
     this.initiative = null;
@@ -132,6 +133,10 @@ class Game{
    * @param {Object} data シナリオjsonをパースしたデータ
    */
   set_scene(data){
+    // フラグの初期化
+    this.shop = [];
+    this.shop_sell = [];
+    
     // 初期化処理
     if(data.startup){
       this.startup();
@@ -451,13 +456,39 @@ class Game{
   }
 
   do_buy(item_name){
-    if(this.items.銀貨.count >= this.items[item_name].prise){
-      this.items[item_name].count++;
-      this.items.銀貨.count -= this.items[item_name].prise;
-      this.message += `${item_name}を手に入れた\n`;
+    if(item_name == "sell"){
+      this.shop = [];
+      this.build_sell_selection();
     }else{
-      this.message += "お金が足りない\n";
+      if(this.items.銀貨.count >= this.items[item_name].prise){
+        this.items[item_name].count++;
+        this.items.銀貨.count -= this.items[item_name].prise;
+        this.message = `${item_name}を手に入れた\n`;
+      }else{
+        this.message = "お金が足りない\n";
+      }
+      this.shop = [];
     }
+  }
+  
+  build_sell_selection(){
+    for(const item_name in this.items){
+    const item = this.items[item_name];
+    if(item.type == 1 && item.count > 0 && item_name != this.members.you.equip.name){
+        this.shop_sell.push({label: `${item_name}を売る(銀貨${item.prise}枚)`, link: item_name});
+      }
+    }
+    if(this.shop_sell.length <= 0){
+      this.message = "装備していない武器がないので、売ることができない\n";
+      this.shop_sell = [];
+    }
+  }
+
+  do_sell(item_name){
+    this.items[item_name].count--;
+    this.items.銀貨.count += this.items[item_name].prise;
+    this.message = `${item_name}を売った\n`;
+    this.shop_sell = [];
   }
 
   safe_get_item(item_name, type){
