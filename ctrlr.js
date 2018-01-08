@@ -165,17 +165,7 @@ function reflesh(){
   $("#select").html("");
   if(g.select){
     for(let i = 0; i < g.select.length; i++){
-      $("#select").append(build_li(g.select[i].label, "do_select", g.select[i].link));
-    }
-  }
-  if(g.shop){
-    for(let i = 0; i < g.shop.length; i++){
-      $("#select").append(build_li(g.shop[i].label, "do_buy", g.shop[i].link));
-    }
-  }
-  if(g.shop_sell){
-    for(let i = 0; i < g.shop_sell.length; i++){
-      $("#select").append(build_li(g.shop_sell[i].label, "do_sell", g.shop_sell[i].link));
+      $("#select").append(build_li(g.select[i]));
     }
   }
   
@@ -304,6 +294,6 @@ function reflesh_icon(canvas, icon_path){
 ==============================================
  */
 
-function build_li(label, func, link){
-  return `<li><a href="#" onclick="${func}('${link}')">${label}</a></li>`;
+function build_li(linker){
+  return `<li><a href="#" onclick="${linker.func}('${linker.link}')">${linker.label}</a></li>`;
 }

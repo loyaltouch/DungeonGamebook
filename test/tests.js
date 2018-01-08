@@ -228,3 +228,89 @@ QUnit.test("2 Dice", (assert)=>{
   }
 });
 
+// シナリオファイルのリンク作成箇所のテスト
+// シナリオファイルの「select」キーの中身を受け取り
+// - label : 奇数項目
+// - func : "do_select" 固定
+// - link : 偶数項目
+// というオブジェクトのセットを作る
+QUnit.test("build select objects from scenario data", (assert)=>{
+  let g = new Game();
+  const data = {
+    "select": ["ひとつめ", "1_1", "ふたつめ", "1_2"]
+  };
+  g.set_scene(data);
+  assert.equal("ひとつめ", g.select[0].label, "select[0] label");
+  assert.equal("do_select", g.select[0].func, "select[0] func");
+  assert.equal("1_1", g.select[0].link, "select[0] link");
+  assert.equal("ふたつめ", g.select[1].label, "select[1] label");
+  assert.equal("do_select", g.select[1].func, "select[1] func");
+  assert.equal("1_2", g.select[1].link, "select[1] link");
+});
+
+// シナリオファイルのリンク作成箇所のテスト2
+// 「next」キーが存在すると
+// - label : "≫次へ" 固定
+// - func : "do_select" 固定
+// - link : 値
+// というオブジェクトのセット
+// 「prev」キーが存在すると
+// - label : "≫戻る" 固定
+// - func : "do_select" 固定
+// - link : 値
+// というオブジェクトのセット
+QUnit.test("build select objects(next,prev) from scenario data", (assert)=>{
+  let g = new Game();
+  const data = {
+    "next": "1_3",
+    "prev": "1_4"
+  };
+  g.set_scene(data);
+  assert.equal("≫次へ", g.select[0].label, "select[0] label");
+  assert.equal("do_select", g.select[0].func, "select[0] func");
+  assert.equal("1_3", g.select[0].link, "select[0] link");
+  assert.equal("≫戻る", g.select[1].label, "select[1] label");
+  assert.equal("do_select", g.select[1].func, "select[1] func");
+  assert.equal("1_4", g.select[1].link, "select[1] link");
+});
+
+// シナリオファイルのリンク作成箇所のテスト3
+// 「shop」キーが存在すると
+// - label : {売り物名}(銀貨{価格}枚)
+// - func : "do_buy" 固定
+// - link : {売り物名}
+// というオブジェクトのセット
+QUnit.test("build shop objects from scenario data", (assert)=>{
+  let g = new Game();
+  g.scene = "1_0";
+  g.items.ナイフ.count = 1;
+  g.items.棍棒.count = 1;
+  g.equip_weapon("ナイフ");
+  const data = {
+    "shop": ["ナイフ", "棍棒"]
+  };
+  // 最初は店売りの選択肢を展開
+  g.set_scene(data);
+  assert.equal("ナイフを買う(銀貨10枚)", g.select[0].label, "select[0] label");
+  assert.equal("do_buy", g.select[0].func, "select[0] func");
+  assert.equal("ナイフ", g.select[0].link, "select[0] link");
+  assert.equal("棍棒を買う(銀貨2枚)", g.select[1].label, "select[1] label");
+  assert.equal("do_buy", g.select[1].func, "select[1] func");
+  assert.equal("棍棒", g.select[1].link, "select[1] link");
+  assert.equal("持ち物を売る", g.select[2].label, "select[2] label");
+  assert.equal("do_buy", g.select[2].func, "select[2] func");
+  assert.equal("sell", g.select[2].link, "select[2] link");
+
+  // 次に「売る」を選択する
+  g.do_buy("sell");
+
+  // 売り物の選択肢を展開
+  assert.equal("棍棒を売る(銀貨2枚)", g.select[0].label, "select[0] label(sell)");
+  assert.equal("do_sell", g.select[0].func, "select[0] func(sell)");
+  assert.equal("棍棒", g.select[0].link, "select[0] link(sell)");
+  assert.equal("≫戻る", g.select[1].label, "select[1] label(sell)");
+  assert.equal("do_select", g.select[1].func, "select[1] func(sell)");
+  assert.equal("1_0", g.select[1].link, "select[1] link(sell)");
+});
+
+

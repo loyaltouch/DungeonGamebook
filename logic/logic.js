@@ -101,8 +101,6 @@ class Game{
     this.global = {};
     this.local = [];
     this.select = [];
-    this.shop = [];
-    this.shop_sell = [];
     this.message = "";
     this.scene = "start";
     this.initiative = null;
@@ -134,8 +132,7 @@ class Game{
    */
   set_scene(data){
     // フラグの初期化
-    this.shop = [];
-    this.shop_sell = [];
+    this.select = [];
     
     // 初期化処理
     if(data.startup){
@@ -178,35 +175,29 @@ class Game{
       this.end = data.end;
     }
 
-    // 選択肢のパース
-    this.select = [];
-    if(data.select){
-      for(let i = 0; i < data.select.length; i += 2){
-        let select1 = this.rep_val(data.select[i]);
-        let select2 = this.rep_val(data.select[i + 1]);
-        let entry = {label: select1, link: select2};
-        this.select.push(entry);
-      }
-    }
-    
     // ショップのパース
     if(data.shop){
       for(let i = 0; i < data.shop.length; i++){
-        this.shop.push({label: `${data.shop[i]}を買う(銀貨${this.items[data.shop[i]].prise}枚)`, link: data.shop[i]});
+        this.select.push({label: `${data.shop[i]}を買う(銀貨${this.items[data.shop[i]].prise}枚)`, func: "do_buy", link: data.shop[i]});
       }
-      this.shop.push({label: "持ち物を売る", link: "sell"});
-    }else{
-      this.shop = [];
+      this.select.push({label: "持ち物を売る", func: "do_buy", link: "sell"});
+    }
+    
+    // 選択肢のパース
+    if(data.select){
+      for(let i = 0; i < data.select.length; i += 2){
+        this.select.push(this.make_sel(data.select[i], data.select[i + 1]));
+      }
     }
 
     // 「次へ」選択肢のパース
     if(data.next){
-      this.select.push({label: "≫次へ", link: this.rep_val(data.next)});
+      this.select.push(this.make_sel("≫次へ", data.next));
     }
 
     // 「戻る」選択肢のパース
     if(data.prev){
-      this.select.push({label: "≫戻る", link: this.rep_val(data.prev)});
+      this.select.push(this.make_sel("≫戻る", data.prev));
     }
 
     // 入力欄のパース
@@ -400,9 +391,9 @@ class Game{
    */
   scenario_luck_test(){
     if(this.luck_test()){
-      this.select.push({label: "≫次へ", link: this.rep_val(this.luck_success)});
+      this.select.push(this.make_sel("≫次へ", this.luck_success));
     }else{
-      this.select.push({label: "≫次へ", link: this.rep_val(this.luck_failure)});
+      this.select.push(this.make_sel("≫次へ", this.luck_failure));
     }
     this.lucky = false;
   }
@@ -456,8 +447,8 @@ class Game{
   }
 
   do_buy(item_name){
+    this.select = [];
     if(item_name == "sell"){
-      this.shop = [];
       this.build_sell_selection();
     }else{
       if(this.items.銀貨.count >= this.items[item_name].prise){
@@ -467,28 +458,36 @@ class Game{
       }else{
         this.message = "お金が足りない\n";
       }
-      this.shop = [];
+      this.select.push(this.make_sel("≫戻る", this.scene));
     }
   }
   
   build_sell_selection(){
+    this.select = [];
+    let sellable = false;
     for(const item_name in this.items){
-    const item = this.items[item_name];
-    if(item.type == 1 && item.count > 0 && item_name != this.members.you.equip.name){
-        this.shop_sell.push({label: `${item_name}を売る(銀貨${item.prise}枚)`, link: item_name});
+      const item = this.items[item_name];
+      if(item.type == 1 && item.count > 0 && item_name != this.members.you.equip.name){
+        this.select.push({
+        label: `${item_name}を売る(銀貨${item.prise}枚)`,
+        func: "do_sell",
+        link: item_name
+        });
+        sellable = true;
       }
     }
-    if(this.shop_sell.length <= 0){
+    if(!sellable){
       this.message = "装備していない武器がないので、売ることができない\n";
-      this.shop_sell = [];
     }
+    this.select.push(this.make_sel("≫戻る", this.scene));
   }
 
   do_sell(item_name){
     this.items[item_name].count--;
     this.items.銀貨.count += this.items[item_name].prise;
     this.message = `${item_name}を売った\n`;
-    this.shop_sell = [];
+    this.select = [];
+    this.select.push(this.make_sel("≫戻る", this.scene));
   }
 
   safe_get_item(item_name, type){
@@ -606,5 +605,27 @@ class Game{
       // 変換できない場合、値をそのまま返す
       return text;
     }
+  }
+
+  /**
+   * 選択リンク用のオブジェクトを生成する。オブジェクトは
+   * <ul>
+   * <li>label : 表示名
+   * <li>func : "do_select" 固定
+   * <li>link : 遷移先のシナリオファイル名
+   * </ul>
+   * の構造である。なお、各値は${...}を展開する
+   *
+   * @method make_sel
+   * @param {String} label 表示名
+   * @param {String} link 遷移先
+   * @return {Object} 生成したリンク用オブジェクト
+   */
+  make_sel(label, link){
+    return {
+      label: this.rep_val(label),
+      func: "do_select",
+      link: this.rep_val(link)
+    };
   }
 }
