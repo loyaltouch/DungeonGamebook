@@ -131,8 +131,9 @@ class Game{
    * @param {Object} data シナリオjsonをパースしたデータ
    */
   set_scene(data){
-    // フラグの初期化
+    // 各種変数の初期化
     this.select = [];
+    this.input = "";
     
     // 初期化処理
     if(data.startup){
@@ -156,8 +157,7 @@ class Game{
 
     // メッセージのパース
     if(data.message){
-      let message2 = this.rep_val(data.message);
-      this.message = message2;
+      this.message = this.rep_val(data.message);
     }
 
     // 画像データのパース
@@ -175,7 +175,7 @@ class Game{
       this.end = data.end;
     }
 
-    // ショップのパース
+    // 店売り機能のパース
     if(data.shop){
       for(let i = 0; i < data.shop.length; i++){
         this.select.push({label: `${data.shop[i]}を買う(銀貨${this.items[data.shop[i]].prise}枚)`, func: "do_buy", link: data.shop[i]});
@@ -201,7 +201,6 @@ class Game{
     }
 
     // 入力欄のパース
-    this.input = "";
     if(data.input){
       this.input = data.input;
     }
