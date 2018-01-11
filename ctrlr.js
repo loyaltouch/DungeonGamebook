@@ -156,11 +156,6 @@ function reflesh(){
     $("#enemy").hide();
   }
 
-  // 戦うリンクの再描画
-  set_visibility("attack", g.attack);
-  set_visibility("lucky", g.lucky);
-  set_visibility("turn", g.turn);
-  
   // 選択欄の再描画
   $("#select").html("");
   if(g.select){

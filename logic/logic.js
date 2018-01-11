@@ -207,7 +207,11 @@ class Game{
 
     // シナリオ内運試しのパース
     if(data.lucky){
-      this.lucky = true;
+      this.select.push({
+        label: "運試しをする",
+        func: "do_luck_test",
+        link: ""
+      });
       this.luck_success = data.lucky[0];
       this.luck_failure = data.lucky[1];
     }else{
@@ -305,13 +309,11 @@ class Game{
   check_game_over(){
     if(this.members.you.vit_now <= 0){
       this.message += "\nあなたは死亡した…\n";
-      this.select = [{label: "≫終わり", link: "start"}];
+      this.select = [this.make_sel("≫終わり", "start")];
       this.input = false;
       this.buttle = false;
       this.target = null;
-      this.attack = false;
       this.lucky = false;
-      this.turn = false;
     }
   }
 
@@ -324,7 +326,7 @@ class Game{
     this.buttle = true;
     let enemy = new Chara("enemy", data.name, data.vit, data.dex, 0);
     this.members.enemy = enemy;
-    this.message = "";
+    this.message = `${enemy.name}と戦闘開始！\n`;
     this.init_turn();
   }
 
@@ -333,9 +335,12 @@ class Game{
    */
   init_turn(){
     this.target = null;
-    this.attack = true;
+    this.select = [{
+      label: "戦う",
+      func: "do_attack",
+      link: ""
+    }];
     this.lucky = false;
-    this.turn = false;
   }
 
   /**
@@ -355,9 +360,18 @@ class Game{
 
     this.message = `あなたの攻撃力 = ${you_dex}\n${this.members.enemy.name}の攻撃力 = ${enm_dex}\nダメージを受けるのは : ${this.target.name}\n`;
     this.damage = 2;
-    this.attack = false;
-    this.lucky = true;
-    this.turn = true;
+    this.select = [
+      {
+      label: "≫次へ",
+      func: "next_turn",
+      link: ""
+      },
+      {
+      label: "運試しをする",
+      func: "do_luck_test",
+      link: ""
+      }
+    ];
   }
 
   /**
@@ -371,11 +385,9 @@ class Game{
     this.message += this.damage + "ダメージ\n";
     if(this.members.enemy.vit_now <= 0){
       this.message += "あなたの勝利！";
-      this.select = [{label: "≫次へ", link: this.rep_val(this.end) }]
+      this.select = this.make_sel("≫次へ", this.end);
       this.buttle = false;
-      this.attack = false;
       this.lucky = false;
-      this.turn = false;
     }else{
       this.init_turn();
       this.check_game_over();
@@ -390,11 +402,10 @@ class Game{
    */
   scenario_luck_test(){
     if(this.luck_test()){
-      this.select.push(this.make_sel("≫次へ", this.luck_success));
+      this.select = [this.make_sel("≫次へ", this.luck_success)];
     }else{
-      this.select.push(this.make_sel("≫次へ", this.luck_failure));
+      this.select = [this.make_sel("≫次へ", this.luck_failure)];
     }
-    this.lucky = false;
   }
 
   /**
@@ -415,7 +426,11 @@ class Game{
         this.damage = 1;
       }
     }
-    this.lucky = false;
+    this.select = [{
+      label: "≫次へ",
+      func: "next_turn",
+      link: ""
+    }];
   }
 
   /**
