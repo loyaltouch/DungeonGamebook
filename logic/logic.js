@@ -214,8 +214,6 @@ class Game{
       });
       this.luck_success = data.lucky[0];
       this.luck_failure = data.lucky[1];
-    }else{
-      this.lucky = false;
     }
 
     // ゲームオーバーの確認
@@ -313,7 +311,6 @@ class Game{
       this.input = false;
       this.buttle = false;
       this.target = null;
-      this.lucky = false;
     }
   }
 
@@ -340,7 +337,6 @@ class Game{
       func: "do_attack",
       link: ""
     }];
-    this.lucky = false;
   }
 
   /**
@@ -385,9 +381,8 @@ class Game{
     this.message += this.damage + "ダメージ\n";
     if(this.members.enemy.vit_now <= 0){
       this.message += "あなたの勝利！";
-      this.select = this.make_sel("≫次へ", this.end);
+      this.select = [this.make_sel("≫次へ", this.end)];
       this.buttle = false;
-      this.lucky = false;
     }else{
       this.init_turn();
       this.check_game_over();
