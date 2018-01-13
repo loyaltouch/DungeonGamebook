@@ -155,6 +155,11 @@ class Game{
       this.load_from_dump(this.dump);
     }
 
+    // 運勢値リセット(祭壇への祈り)の処理
+    if(data.setluck){
+      this.members.you.lck_max = this.members.you.lck_now = data.setluck;
+    }
+
     // メッセージのパース
     if(data.message){
       this.message = this.rep_val(data.message);

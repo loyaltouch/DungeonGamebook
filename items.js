@@ -12,7 +12,6 @@ function get_item_data(){
     "飛鳥の剣": { type: 1, value: 6, prise: 0, count: 0 },
     "りんご"  : { type: 2, value: 0, prise: 5, count: 0 },
     "焼肉"    : { type: 2, value: 0, prise: 5, count: 0 },
-    "ねじり鉢巻き" : { type: 0, value: 0, prise: 5, count: 0 },
-    "おにぎり": { type: 2, value: 0, prise: 5, count: 0 },
+    "鍼"      : { type: 0, value: 0, prise: 5, count: 0 },
   }
 }
