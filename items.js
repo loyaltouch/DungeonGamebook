@@ -13,5 +13,6 @@ function get_item_data(){
     "りんご"  : { type: 2, value: 0, prise: 5, count: 0 },
     "焼肉"    : { type: 2, value: 0, prise: 5, count: 0 },
     "鍼"      : { type: 0, value: 0, prise: 5, count: 0 },
+    "福袋"    : { type: 0, value: 0, prise: 5, count: 0 },
   }
 }

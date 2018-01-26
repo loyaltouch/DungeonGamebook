@@ -155,11 +155,6 @@ class Game{
       this.load_from_dump(this.dump);
     }
 
-    // 運勢値リセット(祭壇への祈り)の処理
-    if(data.setluck){
-      this.members.you.lck_max = this.members.you.lck_now = data.setluck;
-    }
-
     // メッセージのパース
     if(data.message){
       this.message = this.rep_val(data.message);
@@ -330,6 +325,56 @@ class Game{
     this.members.enemy = enemy;
     this.message = `${enemy.name}と戦闘開始！\n`;
     this.init_turn();
+    if(this.make_magics_select().length > 0){
+      this.select = [{
+        label: "魔法を使う",
+        func: "sel_magic",
+        link: ""
+      }];
+    }
+  }
+
+  /**
+   * 魔法選択肢の生成
+   */
+  make_magics_select(){
+    var result = [];
+    this.make_magic_select(result, "鍼", 1);
+    this.make_magic_select(result, "福袋", 2);
+    return result;
+  }
+
+  /**
+   * 個別の魔法選択肢の生成
+   * アイテムを持っていて、かつ現在HPが上だと魔法選択肢を生成
+   *
+   * @method make_magic_select
+   * @param{Arrat} list ここに選択肢を生成
+   * @param{String} item このアイテムを持っていると選択可能
+   * @param{Number} hp プレイヤーの現在HPがこれより上だと選択可能
+   */
+  make_magic_select(list, item, hp){
+    if(this.items[item].count > 0 && this.members.you.vit_now > hp){
+      list.push({
+        label: item,
+        func: "do_magic",
+        link: item
+      });
+    }
+  }
+
+  do_magic(name){
+    if(name == "鍼"){
+      this.members.you.vit_now -= 1;
+      this.members.you.buff = true;
+      this.message += "あなたは筋力強化のツボを刺激した\n技量点が2上がった！";
+    }
+    if(name == "福袋"){
+      this.members.you.vit_now -= 2;
+      this.members.enemy.vit_now -= 5;
+      this.message += "福袋から火の玉が飛び出し、敵に命中！\n5ダメージ";
+    }
+    this.next_turn();
   }
 
   /**
@@ -337,11 +382,11 @@ class Game{
    */
   init_turn(){
     this.target = null;
-    this.select = [{
+    this.select.push({
       label: "戦う",
       func: "do_attack",
       link: ""
-    }];
+    });
   }
 
   /**
@@ -389,6 +434,7 @@ class Game{
       this.select = [this.make_sel("≫次へ", this.end)];
       this.buttle = false;
     }else{
+      this.select = [];
       this.init_turn();
       this.check_game_over();
     }
