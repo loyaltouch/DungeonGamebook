@@ -139,6 +139,7 @@ class Game{
     // 各種変数の初期化
     this.select = [];
     this.input = "";
+    this.members.you.buff = false;
     
     // 初期化処理
     if(data.startup){
@@ -380,16 +381,14 @@ class Game{
     if(name == "鍼"){
       this.members.you.vit_now -= 1;
       this.members.you.buff = true;
-      this.message += "体力点1減少\nあなたは筋力強化のツボを刺激した\n技量点が2上がった！";
-      this.select = [];
-      this.init_turn();
+      this.message += "\n体力点1減少\nあなたは筋力強化のツボを刺激した\n技量点が2上がった！";
     }else if(name == "福袋"){
       this.members.you.vit_now -= 2;
       this.damage = 5;
       this.target = this.members.enemy;
-      this.message += "体力点2減少\n福袋から火の玉が飛び出し、敵に命中！";
-      this.next_turn();
+      this.message += "\n体力点2減少\n福袋から火の玉が飛び出し、敵に命中！";
     }
+    this.next_turn();
   }
 
   /**
@@ -441,9 +440,11 @@ class Game{
    * @method next_turn
    */
   next_turn(){
-    // ダメージの決定
-    this.target.vit_now -= this.damage;
-    this.message += this.damage + "ダメージ\n";
+    // ターゲットが確定していればダメージを確定
+    if(this.target){
+      this.target.vit_now -= this.damage;
+      this.message += this.damage + "ダメージ\n";
+    }
     if(this.members.enemy.vit_now <= 0){
       this.message += "あなたの勝利！";
       this.select = [this.make_sel("≫次へ", this.end)];
