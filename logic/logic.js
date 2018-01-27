@@ -21,6 +21,7 @@ class Chara{
     this.dex = dex;
     this.lck_max = this.lck_now = lck;
     this.equip = { name: "(なし)", type: 1, value: 0, prise: 0 };
+    this.buff = false; // 魔法などで技量点が増加する場合
   }
 
   /**
@@ -30,7 +31,11 @@ class Chara{
    * @return {Number} 攻撃点
    */
   get_dex(){
-    return this.dex + this.equip.value;
+    var result = this.dex + this.equip.value;
+    if(this.buff){
+      result += 2;
+    }
+    return result;
   }
 
   /**
@@ -326,12 +331,20 @@ class Game{
     this.message = `${enemy.name}と戦闘開始！\n`;
     this.init_turn();
     if(this.make_magics_select().length > 0){
-      this.select = [{
+      this.select.push({
         label: "魔法を使う",
-        func: "sel_magic",
+        func: "do_sel_magic",
         link: ""
-      }];
+      });
     }
+  }
+
+  /**
+   * 魔法選択肢の表示
+   */
+  do_sel_magic(){
+    this.message = "魔法の媒介となる道具を選択せよ";
+    this.select = this.make_magics_select();
   }
 
   /**
@@ -367,14 +380,16 @@ class Game{
     if(name == "鍼"){
       this.members.you.vit_now -= 1;
       this.members.you.buff = true;
-      this.message += "あなたは筋力強化のツボを刺激した\n技量点が2上がった！";
-    }
-    if(name == "福袋"){
+      this.message += "体力点1減少\nあなたは筋力強化のツボを刺激した\n技量点が2上がった！";
+      this.select = [];
+      this.init_turn();
+    }else if(name == "福袋"){
       this.members.you.vit_now -= 2;
-      this.members.enemy.vit_now -= 5;
-      this.message += "福袋から火の玉が飛び出し、敵に命中！\n5ダメージ";
+      this.damage = 5;
+      this.target = this.members.enemy;
+      this.message += "体力点2減少\n福袋から火の玉が飛び出し、敵に命中！";
+      this.next_turn();
     }
-    this.next_turn();
   }
 
   /**

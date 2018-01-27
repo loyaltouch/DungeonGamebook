@@ -58,6 +58,18 @@ function do_load(){
   do_select(window._g.scene);
 }
 
+// 魔法選択肢表示
+function do_sel_magic(){
+  window._g.do_sel_magic();
+  reflesh();
+}
+
+// 魔法実行
+function do_magic(name){
+  window._g.do_magic(name);
+  reflesh();
+}
+
 // 自由入力ボタン実行
 function do_input(){
   let g = window._g;
